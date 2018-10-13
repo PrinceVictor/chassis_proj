@@ -37,7 +37,7 @@
 
 #include "gpio.h"
 #include "dma.h"
-
+#include "coummuni.h"
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -51,6 +51,20 @@ DMA_HandleTypeDef hdma_usart2_tx;
 DMA_HandleTypeDef hdma_usart3_rx;
 DMA_HandleTypeDef hdma_usart3_tx;
 
+#define usart1_rx_bufferLength 18
+#define usart2_rx_bufferLength 5
+#define usart3_rx_bufferLength 5
+
+
+uint8_t  remote_rx_buffer[usart1_rx_bufferLength];
+uint8_t usart2_rx_buffer[usart2_rx_bufferLength];
+uint8_t usart3_rx_buffer[usart2_rx_bufferLength];
+
+#define usart2_tx_bufferLength 5
+#define usart3_tx_bufferLength 5
+
+uint8_t usart2_tx_buffer[usart2_tx_bufferLength]; 
+uint8_t usart3_tx_buffer[usart3_tx_bufferLength]; 
 /* USART1 init function */
 
 void MX_USART1_UART_Init(void)
@@ -61,7 +75,7 @@ void MX_USART1_UART_Init(void)
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
+  huart1.Init.Mode = UART_MODE_RX;
   huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart1.Init.OverSampling = UART_OVERSAMPLING_16;
   HAL_UART_Init(&huart1);
@@ -116,7 +130,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     PA9     ------> USART1_TX
     PA10     ------> USART1_RX 
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_10;
+    GPIO_InitStruct.Pin = GPIO_PIN_10;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -140,8 +154,12 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     __HAL_LINKDMA(huart,hdmarx,hdma_usart1_rx);
 
     /* Peripheral interrupt init */
-    HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(USART1_IRQn, 0, 1);
     HAL_NVIC_EnableIRQ(USART1_IRQn);
+		
+		// enable the rx idle interrupt 
+		//__HAL_UART_ENABLE_IT(&huart1,UART_IT_IDLE);
+		
   /* USER CODE BEGIN USART1_MspInit 1 */
 
   /* USER CODE END USART1_MspInit 1 */
@@ -198,6 +216,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     /* Peripheral interrupt init */
     HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(USART2_IRQn);
+	
   /* USER CODE BEGIN USART2_MspInit 1 */
 
   /* USER CODE END USART2_MspInit 1 */
@@ -258,6 +277,44 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 
   /* USER CODE END USART3_MspInit 1 */
   }
+}
+
+void Remote_rx_start(uint8_t flag){
+	HAL_UART_Receive_DMA(&huart1, (uint8_t*)remote_rx_buffer, 18);
+	if(flag){
+		__HAL_UART_ENABLE_IT(&huart1,UART_IT_IDLE);
+	}
+	else return ;
+}
+
+void Usart2_rx_start(uint8_t flag){
+		HAL_UART_Receive_DMA(&huart2, (uint8_t*)usart2_rx_buffer, usart2_rx_bufferLength);
+	if(flag){
+		__HAL_UART_ENABLE_IT(&huart2,UART_IT_IDLE);
+	}
+	else return;
+}
+
+void Usart3_rx_start(uint8_t flag){
+		HAL_UART_Receive_DMA(&huart3, (uint8_t*)usart2_rx_buffer, usart3_rx_bufferLength);
+	if(flag){
+		__HAL_UART_ENABLE_IT(&huart3,UART_IT_IDLE);
+	}
+	else return;
+}
+
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+	if(huart == &huart1){
+		//if(__HAL_UART_GET_FLAG(huart,UART_IT_IDLE)!=RESET){
+			Readremote(remote_rx_buffer);
+	//	}
+	}
+	if(huart == &huart2){
+		usart2_tx_buffer[0] = 0x01;
+		usart2_tx_buffer[1] = 0x0a;
+		HAL_UART_Transmit_DMA(&huart2, (uint8_t *)usart2_tx_buffer, 5);
+	}
 }
 
 void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
@@ -340,6 +397,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
 } 
 
 /* USER CODE BEGIN 1 */
+
 
 /* USER CODE END 1 */
 

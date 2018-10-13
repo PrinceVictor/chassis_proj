@@ -41,6 +41,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 
+	 
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -59,6 +60,10 @@ void MX_USART3_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 
+void Remote_rx_start(uint8_t );
+void Usart2_rx_start(uint8_t );
+
+extern unsigned char remote_rx_buffer[18];
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

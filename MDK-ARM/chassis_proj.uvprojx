@@ -423,6 +423,18 @@
         </Group>
         <Group>
           <GroupName>CoreTask</GroupName>
+          <Files>
+            <File>
+              <FileName>core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\core.c</FilePath>
+            </File>
+            <File>
+              <FileName>communi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\communi.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>Application/MDK-ARM</GroupName>

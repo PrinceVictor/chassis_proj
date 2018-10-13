@@ -36,3 +36,4 @@ chassis_proj\main.o: ../Inc/dma.h
 chassis_proj\main.o: ../Inc/tim.h
 chassis_proj\main.o: ../Inc/usart.h
 chassis_proj\main.o: ../Inc/gpio.h
+chassis_proj\main.o: ../Inc/coummuni.h

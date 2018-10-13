@@ -37,7 +37,7 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-
+#include "coummuni.h"
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -45,6 +45,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 uint32_t count = 0;
+
+
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
@@ -91,12 +93,16 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 	led_config();
+	
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
 	led0_on;
 	led1_off;
 	
+	Remote_rx_start(ENABLE);
+	Usart2_rx_start(ENABLE);
   /* USER CODE BEGIN WHILE */
   while (1)
   {
@@ -104,14 +110,16 @@ int main(void)
 		
   /* USER CODE BEGIN 3 */
 		
-//		count++;
-//		if(count > 300000){
-//			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8);
-//			count = 0;
-//		}
-//		if(HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_8)){
-//			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);
-//		}
+		count++;
+		if(count > 300000){
+			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8);
+			count = 0;
+			Readremote(remote_rx_buffer);
+			
+		}
+		if(HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_8)){
+			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);
+		}
 		
   }
   /* USER CODE END 3 */

@@ -46,10 +46,11 @@
 
 #define led0_on HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8,GPIO_PIN_RESET)
 #define led0_off HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8,GPIO_PIN_SET)
-
+#define led0_switch HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8)
+	 
 #define led1_on HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9,GPIO_PIN_RESET)
 #define led1_off HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9,GPIO_PIN_SET)
-	 
+#define led1_switch HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9)	 
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN Private defines */

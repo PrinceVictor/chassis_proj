@@ -110,16 +110,16 @@ int main(void)
 		
   /* USER CODE BEGIN 3 */
 		
-		count++;
-		if(count > 300000){
-			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8);
-			count = 0;
-			Readremote(remote_rx_buffer);
-			
-		}
-		if(HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_8)){
-			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);
-		}
+//		count++;
+//		if(count > 300000){
+//			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8);
+//			count = 0;
+//		//	Readremote(remote_rx_buffer);
+//			
+//		}
+//		if(HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_8)){
+//			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);
+//		}
 		
   }
   /* USER CODE END 3 */

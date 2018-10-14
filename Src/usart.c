@@ -51,17 +51,10 @@ DMA_HandleTypeDef hdma_usart2_tx;
 DMA_HandleTypeDef hdma_usart3_rx;
 DMA_HandleTypeDef hdma_usart3_tx;
 
-#define usart1_rx_bufferLength 18
-#define usart2_rx_bufferLength 5
-#define usart3_rx_bufferLength 5
-
-
-uint8_t  remote_rx_buffer[usart1_rx_bufferLength];
+uint8_t remote_rx_buffer[usart1_rx_bufferLength];
+uint8_t usart1_rx_buffer[usart1_rx_bufferLength];
 uint8_t usart2_rx_buffer[usart2_rx_bufferLength];
-uint8_t usart3_rx_buffer[usart2_rx_bufferLength];
-
-#define usart2_tx_bufferLength 5
-#define usart3_tx_bufferLength 5
+uint8_t usart3_rx_buffer[usart3_rx_bufferLength];
 
 uint8_t usart2_tx_buffer[usart2_tx_bufferLength]; 
 uint8_t usart3_tx_buffer[usart3_tx_bufferLength]; 
@@ -154,7 +147,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     __HAL_LINKDMA(huart,hdmarx,hdma_usart1_rx);
 
     /* Peripheral interrupt init */
-    HAL_NVIC_SetPriority(USART1_IRQn, 0, 1);
+    HAL_NVIC_SetPriority(USART1_IRQn, 0, 2);
     HAL_NVIC_EnableIRQ(USART1_IRQn);
 		
 		// enable the rx idle interrupt 
@@ -214,7 +207,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     __HAL_LINKDMA(huart,hdmatx,hdma_usart2_tx);
 
     /* Peripheral interrupt init */
-    HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(USART2_IRQn, 1, 0);
     HAL_NVIC_EnableIRQ(USART2_IRQn);
 	
   /* USER CODE BEGIN USART2_MspInit 1 */
@@ -271,7 +264,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     __HAL_LINKDMA(huart,hdmatx,hdma_usart3_tx);
 
     /* Peripheral interrupt init */
-    HAL_NVIC_SetPriority(USART3_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(USART3_IRQn, 1, 0);
     HAL_NVIC_EnableIRQ(USART3_IRQn);
   /* USER CODE BEGIN USART3_MspInit 1 */
 
@@ -279,8 +272,13 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
   }
 }
 
+/** @brief  function to start the usart1\2\3 recieve data 
+** @param  flag: enbale the interrupt with corresponding to usart
+ *            @arg 
+ * @retval None
+ */
 void Remote_rx_start(uint8_t flag){
-	HAL_UART_Receive_DMA(&huart1, (uint8_t*)remote_rx_buffer, 18);
+	HAL_UART_Receive_DMA(&huart1, (uint8_t*)usart1_rx_buffer, usart1_rx_bufferLength);
 	if(flag){
 		__HAL_UART_ENABLE_IT(&huart1,UART_IT_IDLE);
 	}
@@ -296,26 +294,13 @@ void Usart2_rx_start(uint8_t flag){
 }
 
 void Usart3_rx_start(uint8_t flag){
-		HAL_UART_Receive_DMA(&huart3, (uint8_t*)usart2_rx_buffer, usart3_rx_bufferLength);
+		HAL_UART_Receive_DMA(&huart3, (uint8_t*)usart3_rx_buffer, usart3_rx_bufferLength);
 	if(flag){
 		__HAL_UART_ENABLE_IT(&huart3,UART_IT_IDLE);
 	}
 	else return;
 }
 
-
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
-	if(huart == &huart1){
-		//if(__HAL_UART_GET_FLAG(huart,UART_IT_IDLE)!=RESET){
-			Readremote(remote_rx_buffer);
-	//	}
-	}
-	if(huart == &huart2){
-		usart2_tx_buffer[0] = 0x01;
-		usart2_tx_buffer[1] = 0x0a;
-		HAL_UART_Transmit_DMA(&huart2, (uint8_t *)usart2_tx_buffer, 5);
-	}
-}
 
 void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
 {

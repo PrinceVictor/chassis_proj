@@ -26,9 +26,9 @@ typedef struct RC_Ctl
 	{
 		uint16_t v;
 	}key;
-
 }_RC_Ctl;
 
-void Readremote(unsigned char *);
+
+uint8_t Readremote(const uint8_t*);
 #endif
 

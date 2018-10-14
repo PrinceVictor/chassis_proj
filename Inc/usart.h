@@ -43,6 +43,12 @@
 
 	 
 /* USER CODE BEGIN Includes */
+#define usart1_rx_bufferLength 18
+#define usart2_rx_bufferLength 5
+#define usart3_rx_bufferLength 5
+
+#define usart2_tx_bufferLength 5
+#define usart3_tx_bufferLength 5
 
 /* USER CODE END Includes */
 
@@ -63,7 +69,10 @@ void MX_USART3_UART_Init(void);
 void Remote_rx_start(uint8_t );
 void Usart2_rx_start(uint8_t );
 
-extern unsigned char remote_rx_buffer[18];
+extern uint8_t remote_rx_buffer[usart1_rx_bufferLength];
+extern uint8_t usart1_rx_buffer[usart1_rx_bufferLength];
+extern uint8_t usart2_rx_buffer[usart2_rx_bufferLength];
+extern uint8_t usart3_rx_buffer[usart3_rx_bufferLength];
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

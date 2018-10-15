@@ -1,5 +1,5 @@
-#ifndef __coummuni_H
-#define __coummuni_H
+#ifndef __communi_H
+#define __communi_H
 
 #include "stm32f4xx_hal.h"
 

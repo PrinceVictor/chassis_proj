@@ -37,7 +37,7 @@
 
 #include "gpio.h"
 #include "dma.h"
-#include "coummuni.h"
+#include "communi.h"
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -273,9 +273,9 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
 }
 
 /** @brief  function to start the usart1\2\3 recieve data 
-** @param  flag: enbale the interrupt with corresponding to usart
+*** @param  flag: enbale the interrupt with corresponding to usart
  *            @arg 
- * @retval None
+ *  @retval None
  */
 void Remote_rx_start(uint8_t flag){
 	HAL_UART_Receive_DMA(&huart1, (uint8_t*)usart1_rx_buffer, usart1_rx_bufferLength);

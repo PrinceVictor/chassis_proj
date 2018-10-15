@@ -1,4 +1,4 @@
-#include "coummuni.h"
+#include "communi.h"
 
 _RC_Ctl remote = {0};
 uint8_t remoteData_receiveFlag = 0;
@@ -20,6 +20,7 @@ uint8_t Readremote(const uint8_t* buffer){
 		
 		//clear remote receive complete flag	;
 		remoteData_receiveFlag = 0;
+		return 1;
 	}
 	return remoteData_receiveFlag;
 }

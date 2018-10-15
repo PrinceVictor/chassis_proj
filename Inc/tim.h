@@ -54,7 +54,7 @@ extern TIM_HandleTypeDef htim4;
 
 void MX_TIM3_Init(void);
 void MX_TIM4_Init(void);
-
+void MX_TIM2_Init(void);
 /* USER CODE BEGIN Prototypes */
 
 /* USER CODE END Prototypes */

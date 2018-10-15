@@ -38,9 +38,32 @@
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
-
+TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
+
+void MX_TIM2_Init(void)
+{
+  TIM_ClockConfigTypeDef sClockSourceConfig;
+  TIM_MasterConfigTypeDef sMasterConfig;
+
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 84-1;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 0Xffffffff-1;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  HAL_TIM_Base_Init(&htim2);
+
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig);
+
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig);
+	
+	__HAL_RCC_TIM2_CLK_ENABLE();
+	__HAL_TIM_ENABLE(&htim2);
+}
 
 /* TIM3 init function */
 //system clock t = 0.1ms
@@ -50,7 +73,7 @@ void MX_TIM3_Init(void)
   TIM_MasterConfigTypeDef sMasterConfig;
 
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 42-1;
+  htim3.Init.Prescaler = 84-1;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim3.Init.Period = 100-1;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -64,6 +87,7 @@ void MX_TIM3_Init(void)
   HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig);
 
 	__HAL_TIM_ENABLE_IT(&htim3,TIM_IT_UPDATE);
+	__HAL_TIM_ENABLE(&htim3);
 }
 /* TIM4 init function */
 //core task process clock t = 1ms
@@ -73,7 +97,7 @@ void MX_TIM4_Init(void)
   TIM_MasterConfigTypeDef sMasterConfig;
 
   htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 42-1;
+  htim4.Init.Prescaler = 84-1;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim4.Init.Period = 1000-1;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -89,6 +113,11 @@ void MX_TIM4_Init(void)
 	__HAL_TIM_ENABLE_IT(&htim4,TIM_IT_UPDATE);
 	__HAL_TIM_ENABLE(&htim4);
 
+}
+
+uint32_t Get_Time_Micros(void)
+{
+	return TIM2->CNT;
 }
 
 void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)

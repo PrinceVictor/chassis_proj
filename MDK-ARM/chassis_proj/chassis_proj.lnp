@@ -9,6 +9,10 @@
 "chassis_proj\stm32f4xx_it.o"
 "chassis_proj\core.o"
 "chassis_proj\communi.o"
+"chassis_proj\pid.o"
+"chassis_proj\imu.o"
+"chassis_proj\i2c.o"
+"chassis_proj\6050.o"
 "chassis_proj\startup_stm32f405xx.o"
 "chassis_proj\system_stm32f4xx.o"
 "chassis_proj\stm32f4xx_hal_tim.o"
@@ -27,6 +31,8 @@
 "chassis_proj\stm32f4xx_hal_pwr.o"
 "chassis_proj\stm32f4xx_hal_dma.o"
 "chassis_proj\stm32f4xx_hal_flash.o"
+"chassis_proj\stm32f4xx_hal_i2c.o"
+"chassis_proj\stm32f4xx_hal_i2c_ex.o"
 --library_type=microlib --strict --scatter "chassis_proj\chassis_proj.sct"
 --diag_suppress=L6329 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

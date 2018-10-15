@@ -26,6 +26,8 @@ chassis_proj\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_can.h
 chassis_proj\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h
 chassis_proj\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h
 chassis_proj\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
+chassis_proj\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h
+chassis_proj\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h
 chassis_proj\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 chassis_proj\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 chassis_proj\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
@@ -36,4 +38,5 @@ chassis_proj\main.o: ../Inc/dma.h
 chassis_proj\main.o: ../Inc/tim.h
 chassis_proj\main.o: ../Inc/usart.h
 chassis_proj\main.o: ../Inc/gpio.h
-chassis_proj\main.o: ../Inc/coummuni.h
+chassis_proj\main.o: ../Inc/communi.h
+chassis_proj\main.o: ../Inc/i2c.h

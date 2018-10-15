@@ -37,16 +37,19 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-#include "coummuni.h"
+#include "communi.h"
+#include "i2c.h"
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
 
-uint32_t count = 0;
+uint32_t main_count = 0;
+uint32_t last_mainCount = 0;
+uint32_t time_ms = 0;
 
-
+uint16_t count =0;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
@@ -57,6 +60,13 @@ void SystemClock_Config(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
+
+void delayms(uint32_t );
+uint32_t GetTime(const uint32_t,const uint32_t);
+
+void imu(int8_t);
+uint8_t InitMPU6050(void);
+void Gyro_OFFEST(void);
 
 /* USER CODE END PFP */
 
@@ -84,6 +94,7 @@ int main(void)
   MX_DMA_Init();
   MX_CAN1_Init();
   MX_CAN2_Init();
+	MX_TIM2_Init();
   MX_TIM3_Init();
   MX_TIM4_Init();
   MX_USART1_UART_Init();
@@ -91,7 +102,10 @@ int main(void)
   MX_USART3_UART_Init();
 
   /* USER CODE BEGIN 2 */
-
+	IIC_Init();
+	InitMPU6050();
+	Gyro_OFFEST();
+	
 	led_config();
 	
 	
@@ -107,23 +121,24 @@ int main(void)
   while (1)
   {
   /* USER CODE END WHILE */
-		
+		imu(ENABLE);
+//		led0_switch;
+//		last_mainCount = main_count;
+//		delayms(count);
+//		time_ms = GetTime(main_count,last_mainCount);
   /* USER CODE BEGIN 3 */
 		
-//		count++;
-//		if(count > 300000){
-//			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8);
-//			count = 0;
-//		//	Readremote(remote_rx_buffer);
-//			
-//		}
-//		if(HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_8)){
-//			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9);
-//		}
 		
   }
   /* USER CODE END 3 */
 
+}
+
+uint32_t GetTime(const uint32_t now,const uint32_t last){
+	if(now >= last){
+		return (now-last)/10;
+	}
+	else return (0xffffffff + now -last)/10 ;
 }
 
 /** System Clock Configuration

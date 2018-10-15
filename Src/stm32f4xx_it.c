@@ -57,6 +57,9 @@ extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 
 extern uint8_t remoteData_receiveFlag;
+extern uint32_t main_count;
+
+uint8_t Core_Task(uint8_t, uint32_t*);
 /******************************************************************************/
 /*            Cortex-M4 Processor Interruption and Exception Handlers         */ 
 /******************************************************************************/
@@ -264,10 +267,12 @@ void CAN1_RX0_IRQHandler(void)
 /**
 * @brief This function handles TIM3 global interrupt.
 */
+static uint32_t tim3_count = 0;
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
-
+	tim3_count++;
+	main_count++;
   /* USER CODE END TIM3_IRQn 0 */
   HAL_TIM_IRQHandler(&htim3);
   /* USER CODE BEGIN TIM3_IRQn 1 */
@@ -279,16 +284,20 @@ void TIM3_IRQHandler(void)
 * @brief This function handles TIM4 global interrupt.
 */
 static uint32_t tim4_count = 0;
+uint32_t core_count = 0;
+uint8_t check_flag;
+
 void TIM4_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM4_IRQn 0 */
 
 	tim4_count++;
+	core_count++;
 	if(tim4_count>1000){
 		led1_switch;
 		tim4_count = 0;
 	}
-	
+	check_flag = Core_Task(ENABLE, &core_count);
   /* USER CODE END TIM4_IRQn 0 */
   HAL_TIM_IRQHandler(&htim4);
   /* USER CODE BEGIN TIM4_IRQn 1 */
@@ -303,7 +312,7 @@ void USART1_IRQHandler(void)
 {
   /* USER CODE BEGIN USART1_IRQn 0 */
 	static uint16_t usart1_runtime_rxlen = 0;
-	if(__HAL_UART_GET_FLAG(&huart2,UART_FLAG_IDLE)!= RESET){
+	if(__HAL_UART_GET_FLAG(&huart1,UART_FLAG_IDLE)!= RESET){
 	
 	//clear the IDLE  interrupt flag
 	huart1.Instance->SR;
@@ -313,7 +322,9 @@ void USART1_IRQHandler(void)
 	
 	usart1_runtime_rxlen=usart1_rx_bufferLength- __HAL_DMA_GET_COUNTER(&hdma_usart1_rx);
 	//hdma_usart2_rx.Instance->NDTR = (uint32_t)usart2_rx_bufferLength;
-	
+	if(usart1_runtime_rxlen==0){
+			usart1_runtime_rxlen = usart1_rx_bufferLength;
+	}
 	__HAL_DMA_ENABLE(&hdma_usart1_rx);
 	
 	if(usart1_runtime_rxlen == usart1_rx_bufferLength){
@@ -350,7 +361,9 @@ void USART2_IRQHandler(void)
 		
 		usart2_runtime_rxlen=usart2_rx_bufferLength- __HAL_DMA_GET_COUNTER(&hdma_usart2_rx);
 		//hdma_usart2_rx.Instance->NDTR = (uint32_t)usart2_rx_bufferLength;
-		
+		if(usart2_runtime_rxlen==0){
+			usart2_runtime_rxlen = usart2_rx_bufferLength;
+		}
 		__HAL_DMA_ENABLE(&hdma_usart2_rx);
 		
 		if(usart2_runtime_rxlen == usart2_rx_bufferLength){

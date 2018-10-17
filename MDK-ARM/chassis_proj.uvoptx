@@ -237,52 +237,52 @@
         <Ww>
           <count>6</count>
           <WinNumber>1</WinNumber>
-          <ItemText>time_ms,0x0A</ItemText>
+          <ItemText>sensor,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>7</count>
           <WinNumber>1</WinNumber>
-          <ItemText>main_count,0x0A</ItemText>
+          <ItemText>angle</ItemText>
         </Ww>
         <Ww>
           <count>8</count>
           <WinNumber>1</WinNumber>
-          <ItemText>last_mainCount,0x0A</ItemText>
+          <ItemText>chassisPara</ItemText>
         </Ww>
         <Ww>
           <count>9</count>
           <WinNumber>1</WinNumber>
-          <ItemText>count,0x0A</ItemText>
+          <ItemText>imu_yaw,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>10</count>
           <WinNumber>1</WinNumber>
-          <ItemText>check,0x0A</ItemText>
+          <ItemText>Main_fs,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>11</count>
           <WinNumber>1</WinNumber>
-          <ItemText>sensor,0x0A</ItemText>
+          <ItemText>uart2_tx_busyFlag,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>12</count>
           <WinNumber>1</WinNumber>
-          <ItemText>angle</ItemText>
+          <ItemText>usart2_tx_buffer,0x10</ItemText>
         </Ww>
         <Ww>
           <count>13</count>
           <WinNumber>1</WinNumber>
-          <ItemText>chassisPara</ItemText>
+          <ItemText>tim4_fs,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>14</count>
           <WinNumber>1</WinNumber>
-          <ItemText>imu_yaw,0x0A</ItemText>
+          <ItemText>usart2_tx_interrupt_fs,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>15</count>
           <WinNumber>1</WinNumber>
-          <ItemText>hcan1</ItemText>
+          <ItemText>huart2,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>

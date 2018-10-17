@@ -43,8 +43,15 @@
 
 /* USER CODE BEGIN Includes */
 
+typedef struct{
+	uint32_t now;
+	uint32_t last;
+	uint32_t period;
+	uint32_t freqz;
+}Freqz;	
+	 
 /* USER CODE END Includes */
-
+extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
 

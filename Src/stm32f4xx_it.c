@@ -37,7 +37,7 @@
 #include "gpio.h"
 #include "usart.h"
 #include "string.h"
-
+#include "tim.h"
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -45,6 +45,7 @@
 /* External variables --------------------------------------------------------*/
 extern CAN_HandleTypeDef hcan1;
 extern CAN_HandleTypeDef hcan2;
+extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
 extern DMA_HandleTypeDef hdma_usart1_rx;
@@ -57,9 +58,12 @@ extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 
 extern uint8_t remoteData_receiveFlag;
-extern uint32_t main_count;
 
 uint8_t Core_Task(uint8_t, uint32_t*);
+uint32_t Get_Freqz(Freqz*);
+
+Freqz usart2_tx_interrupt_fs;
+uint8_t uart2_tx_busyFlag = 0;
 /******************************************************************************/
 /*            Cortex-M4 Processor Interruption and Exception Handlers         */ 
 /******************************************************************************/
@@ -228,7 +232,12 @@ void DMA1_Stream5_IRQHandler(void)
 void DMA1_Stream6_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Stream6_IRQn 0 */
-
+	if(__HAL_DMA_GET_FLAG(&hdma_usart2_tx,DMA_FLAG_TCIF2_6)!=RESET){
+		__HAL_DMA_CLEAR_FLAG(&hdma_usart2_tx,DMA_FLAG_TCIF2_6);
+		uart2_tx_busyFlag = 0;
+		Get_Freqz(&usart2_tx_interrupt_fs);
+		__HAL_DMA_ENABLE(&hdma_usart2_tx);
+	}
   /* USER CODE END DMA1_Stream6_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_usart2_tx);
   /* USER CODE BEGIN DMA1_Stream6_IRQn 1 */
@@ -264,6 +273,16 @@ void CAN1_RX0_IRQHandler(void)
   /* USER CODE END CAN1_RX0_IRQn 1 */
 }
 
+void TIM2_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM4_IRQn 0 */
+  /* USER CODE END TIM4_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim2);
+  /* USER CODE BEGIN TIM4_IRQn 1 */
+
+  /* USER CODE END TIM4_IRQn 1 */
+}
+
 /**
 * @brief This function handles TIM3 global interrupt.
 */
@@ -272,7 +291,6 @@ void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
 	tim3_count++;
-	main_count++;
   /* USER CODE END TIM3_IRQn 0 */
   HAL_TIM_IRQHandler(&htim3);
   /* USER CODE BEGIN TIM3_IRQn 1 */

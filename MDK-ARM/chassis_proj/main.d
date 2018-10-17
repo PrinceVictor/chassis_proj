@@ -40,3 +40,4 @@ chassis_proj\main.o: ../Inc/usart.h
 chassis_proj\main.o: ../Inc/gpio.h
 chassis_proj\main.o: ../Inc/communi.h
 chassis_proj\main.o: ../Inc/i2c.h
+chassis_proj\main.o: ../Inc/core.h

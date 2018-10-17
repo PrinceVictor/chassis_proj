@@ -39,17 +39,16 @@
 #include "gpio.h"
 #include "communi.h"
 #include "i2c.h"
+#include "core.h"
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
-
-uint32_t main_count = 0;
-uint32_t last_mainCount = 0;
-uint32_t time_ms = 0;
+Freqz Main_fs;
 
 uint16_t count =0;
+
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
@@ -62,7 +61,7 @@ void SystemClock_Config(void);
 /* Private function prototypes -----------------------------------------------*/
 
 void delayms(uint32_t );
-uint32_t GetTime(const uint32_t,const uint32_t);
+uint32_t Get_Freqz(Freqz*);
 
 void imu(int8_t);
 uint8_t InitMPU6050(void);
@@ -121,24 +120,18 @@ int main(void)
   while (1)
   {
   /* USER CODE END WHILE */
-//		imu(ENABLE);
+		imu(ENABLE);
+//		Get_Freqz(&Main_fs);
 //		led0_switch;
 //		last_mainCount = main_count;
 //		delayms(count);
-//		time_ms = GetTime(main_count,last_mainCount);
+
   /* USER CODE BEGIN 3 */
 		
 		
   }
   /* USER CODE END 3 */
 
-}
-
-uint32_t GetTime(const uint32_t now,const uint32_t last){
-	if(now >= last){
-		return (now-last)/10;
-	}
-	else return (0xffffffff + now -last)/10 ;
 }
 
 /** System Clock Configuration

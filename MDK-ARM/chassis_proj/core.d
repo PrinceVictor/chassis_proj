@@ -38,3 +38,7 @@ chassis_proj\core.o: ../Inc/communi.h
 chassis_proj\core.o: ../Inc/gpio.h
 chassis_proj\core.o: ../Inc/can.h
 chassis_proj\core.o: ../Inc/imu.h
+chassis_proj\core.o: ../Inc/usart.h
+chassis_proj\core.o: ../Inc/6050.h
+chassis_proj\core.o: D:\Keil5\ARM\ARMCC\Bin\..\include\string.h
+chassis_proj\core.o: ../Inc/tim.h

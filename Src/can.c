@@ -226,11 +226,19 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* hcan)
 {
    switch(hcan->pRxMsg->StdId){
 		 case CAN_IMU_RxID:{
-			 if(!imu_yaw.flag){
-				 imu_yaw.flag = 1;
-			 }
 			 imu_yaw.yaw = 0.01f *((hcan->pRxMsg->Data[0]<<24) + (hcan->pRxMsg->Data[1]<<16) \
 															+ (hcan->pRxMsg->Data[2] <<8) + (hcan->pRxMsg->Data[3]) );
+			  if(!imu_yaw.flag){
+				 if(imu_yaw.cycle_calibration){
+					 if(imu_yaw.yaw !=0) {
+						 imu_yaw.yaw = 0;
+					 }
+					 imu_yaw.cycle_calibration --;
+				 }
+				 else {
+					 imu_yaw.flag = 1;
+				 }
+			 }
 			 break ;
 		 }
 		 default :break;

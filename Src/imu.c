@@ -5,7 +5,7 @@
 
 #define GYRO_GAP 30
 
-_imu_yaw imu_yaw = {0,0,0,3000,0};
+_imu_yaw imu_yaw = {0,0,0,3000,0,100};
 _angle angle;
 
 int16_t IMU_TxInit[4] = { 0x0001, 0x0203, 0x0405, 0x0607 };
@@ -36,12 +36,14 @@ uint32_t Get_Time_Micros(void);
 
 void imu(int8_t flag){
 	readIMU(1);
-//	IMUupdate(sensor.gyro.radian.x,
-//						sensor.gyro.radian.y,
-//						sensor.gyro.radian.z,
-//						sensor.acc.averag.x,
-//						sensor.acc.averag.y,
-//						sensor.acc.averag.z);	
+#if 0	
+	IMUupdate(sensor.gyro.radian.x,
+						sensor.gyro.radian.y,
+						sensor.gyro.radian.z,
+						sensor.acc.averag.x,
+						sensor.acc.averag.y,
+						sensor.acc.averag.z);	
+#endif
 }
 
 /*¸üÐÂË«Öá ½ÇËÙ¶È ½Ç¶È can±àÂëÆ÷ÐÅÏ¢*/
@@ -66,7 +68,7 @@ void readIMU(uint8_t flag)
 		sensor.gyro.origin.x = ((((int16_t)mpu6050_buffer[8]) << 8) | mpu6050_buffer[9])- sensor.gyro.quiet.x;
 		sensor.gyro.origin.y = ((((int16_t)mpu6050_buffer[10]) << 8)| mpu6050_buffer[11])- sensor.gyro.quiet.y;
 		sensor.gyro.origin.z = ((((int16_t)mpu6050_buffer[12]) << 8)| mpu6050_buffer[13])- sensor.gyro.quiet.z;
-		
+#if 0	
 		Gyro_File_Buf[0][gyro_filter_cnt] = sensor.gyro.origin.x ;
 		Gyro_File_Buf[1][gyro_filter_cnt] = sensor.gyro.origin.y ;
 		Gyro_File_Buf[2][gyro_filter_cnt] = sensor.gyro.origin.z ;
@@ -91,7 +93,7 @@ void readIMU(uint8_t flag)
 		sensor.acc.averag.x = KalmanFilter_x(sensor.acc.origin.x,KALMAN_Q,KALMAN_R);  // ACC XÖá¿¨¶ûÂüÂË²¨
 		sensor.acc.averag.y = KalmanFilter_y(sensor.acc.origin.y,KALMAN_Q,KALMAN_R);  // ACC YÖá¿¨¶ûÂüÂË²¨
 		sensor.acc.averag.z = KalmanFilter_z(sensor.acc.origin.z,KALMAN_Q,KALMAN_R);  // ACC ZÖá¿¨¶ûÂüÂË²
-	
+#endif
 	}
 }
 
@@ -116,10 +118,10 @@ void IMUupdate(float gx, float gy, float gz, float ax, float ay, float az)
     float q3q3 = q3*q3;   
 
 		
-	  now = Get_Time_Micros();  //¶ÁÈ¡Ê±¼ä µ¥Î»ÊÇus   
+	  now = TIM2->CNT;  //¶ÁÈ¡Ê±¼ä µ¥Î»ÊÇus   
     if(now<lastUpdate)
     {
-		//	halfT =  ((float)(now + (0xffffffff- lastUpdate)) / 2000000.0f);   //  uint 0.5s
+			halfT =  ((float)(now + (0xffffffff- lastUpdate)) / 500000.0f);   //  uint 0.5s
     }
     else	
     {

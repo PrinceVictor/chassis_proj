@@ -29,6 +29,7 @@ typedef struct{
 	float yaw_last;
 	uint16_t count;
 	uint8_t flag;
+	uint8_t cycle_calibration;
 }_imu_yaw;
 
 void IMUupdate(float gx, float gy, float gz, float ax, float ay, float az);

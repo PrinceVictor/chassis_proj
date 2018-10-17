@@ -80,7 +80,7 @@ void MX_USART2_UART_Init(void)
 {
 
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 115200;
+  huart2.Init.BaudRate = 190000;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -150,6 +150,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     HAL_NVIC_SetPriority(USART1_IRQn, 0, 2);
     HAL_NVIC_EnableIRQ(USART1_IRQn);
 		
+		//__HAL_DMA_ENABLE_IT(&hdma_usart2_tx,DMA_IT_TC);
 		// enable the rx idle interrupt 
 		//__HAL_UART_ENABLE_IT(&huart1,UART_IT_IDLE);
 		
@@ -209,7 +210,8 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     /* Peripheral interrupt init */
     HAL_NVIC_SetPriority(USART2_IRQn, 1, 0);
     HAL_NVIC_EnableIRQ(USART2_IRQn);
-	
+		
+		__HAL_DMA_ENABLE_IT(&hdma_usart2_tx,DMA_IT_TC);
   /* USER CODE BEGIN USART2_MspInit 1 */
 
   /* USER CODE END USART2_MspInit 1 */
@@ -286,7 +288,7 @@ void Remote_rx_start(uint8_t flag){
 }
 
 void Usart2_rx_start(uint8_t flag){
-		HAL_UART_Receive_DMA(&huart2, (uint8_t*)usart2_rx_buffer, usart2_rx_bufferLength);
+	HAL_UART_Receive_DMA(&huart2, (uint8_t*)usart2_rx_buffer, usart2_rx_bufferLength);
 	if(flag){
 		__HAL_UART_ENABLE_IT(&huart2,UART_IT_IDLE);
 	}
@@ -294,7 +296,7 @@ void Usart2_rx_start(uint8_t flag){
 }
 
 void Usart3_rx_start(uint8_t flag){
-		HAL_UART_Receive_DMA(&huart3, (uint8_t*)usart3_rx_buffer, usart3_rx_bufferLength);
+	HAL_UART_Receive_DMA(&huart3, (uint8_t*)usart3_rx_buffer, usart3_rx_bufferLength);
 	if(flag){
 		__HAL_UART_ENABLE_IT(&huart3,UART_IT_IDLE);
 	}

@@ -47,7 +47,7 @@
 #define usart2_rx_bufferLength 5
 #define usart3_rx_bufferLength 5
 
-#define usart2_tx_bufferLength 5
+#define usart2_tx_bufferLength 19
 #define usart3_tx_bufferLength 5
 
 /* USER CODE END Includes */

@@ -435,6 +435,11 @@
               <FilePath>..\Src\communi.c</FilePath>
             </File>
             <File>
+              <FileName>chassis.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\chassis.c</FilePath>
+            </File>
+            <File>
               <FileName>pid.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\pid.c</FilePath>

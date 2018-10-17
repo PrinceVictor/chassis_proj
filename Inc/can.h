@@ -43,6 +43,13 @@
 
 /* USER CODE BEGIN Includes */
 
+typedef enum{
+
+	CAN_IMU_RxID= 0x401,
+	CAN_IMU_TxID= 0x404
+
+}CAN_MessageID;
+
 /* USER CODE END Includes */
 
 extern CAN_HandleTypeDef hcan1;
@@ -54,6 +61,8 @@ extern CAN_HandleTypeDef hcan2;
 
 void MX_CAN1_Init(void);
 void MX_CAN2_Init(void);
+HAL_StatusTypeDef can_send_msg(uint8_t , CAN_HandleTypeDef* , CAN_MessageID , int16_t *);
+
 
 /* USER CODE BEGIN Prototypes */
 

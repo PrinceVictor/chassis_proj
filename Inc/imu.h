@@ -12,7 +12,6 @@
 #define Kii 0.01f                     // integral gain governs rate of convergence of gyroscope biases
 #define KALMAN_Q        0.02
 #define KALMAN_R        6.0000
-#define GYRO_FILTER_NUM 10
 
 float invSqrt(float x);
 
@@ -28,6 +27,8 @@ typedef struct{
 	float yaw_speed;
 	float yaw;
 	float yaw_last;
+	uint16_t count;
+	uint8_t flag;
 }_imu_yaw;
 
 void IMUupdate(float gx, float gy, float gz, float ax, float ay, float az);

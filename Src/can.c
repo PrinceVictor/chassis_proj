@@ -34,8 +34,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "can.h"
-
 #include "gpio.h"
+#include "chassis.h"
+#include "imu.h"
 
 /* USER CODE BEGIN 0 */
 
@@ -43,6 +44,14 @@
 
 CAN_HandleTypeDef hcan1;
 CAN_HandleTypeDef hcan2;
+
+CAN_FilterConfTypeDef can1_filetr;
+CAN_FilterConfTypeDef can2_filetr;
+
+CanTxMsgTypeDef Tx1Message;
+CanRxMsgTypeDef	Rx1Message;
+
+extern _chassis chassisPara;
 
 /* CAN1 init function */
 void MX_CAN1_Init(void)
@@ -61,7 +70,25 @@ void MX_CAN1_Init(void)
   hcan1.Init.RFLM = DISABLE;
   hcan1.Init.TXFP = DISABLE;
   HAL_CAN_Init(&hcan1);
-
+	
+	can1_filetr.FilterIdHigh=0X0000;     //32位ID
+  can1_filetr.FilterIdLow=0X0000;
+	can1_filetr.FilterMaskIdHigh=0X0000; //32位MASK
+	can1_filetr.FilterMaskIdLow=0X0000;  
+	can1_filetr.FilterFIFOAssignment=CAN_FILTER_FIFO0;//过滤器0关联到FIFO0
+	can1_filetr.FilterNumber=0;          //过滤器0
+	can1_filetr.FilterMode=CAN_FILTERMODE_IDMASK;
+	can1_filetr.FilterScale=CAN_FILTERSCALE_32BIT;
+	can1_filetr.FilterActivation=ENABLE; //激活滤波器0
+	can1_filetr.BankNumber=14;	
+	
+	HAL_CAN_ConfigFilter(&hcan1,&can1_filetr);
+	
+	hcan1.pTxMsg = &Tx1Message;
+	hcan1.pRxMsg = &Rx1Message;
+	
+	__HAL_CAN_ENABLE_IT(&hcan1,CAN_IT_FMP0);
+	
 }
 /* CAN2 init function */
 void MX_CAN2_Init(void)
@@ -80,7 +107,18 @@ void MX_CAN2_Init(void)
   hcan2.Init.RFLM = DISABLE;
   hcan2.Init.TXFP = DISABLE;
   HAL_CAN_Init(&hcan2);
-
+	
+	can2_filetr.FilterIdHigh=0X0000;     //32位ID
+  can2_filetr.FilterIdLow=0X0000;
+	can2_filetr.FilterMaskIdHigh=0X0000; //32位MASK
+	can2_filetr.FilterMaskIdLow=0X0000;  
+	can2_filetr.FilterFIFOAssignment=CAN_FILTER_FIFO0;//过滤器0关联到FIFO0
+	can2_filetr.FilterNumber=14;          //过滤器0
+	can2_filetr.FilterMode=CAN_FILTERMODE_IDMASK;
+	can2_filetr.FilterScale=CAN_FILTERSCALE_32BIT;
+	can2_filetr.FilterActivation=ENABLE; //激活滤波器0
+	HAL_CAN_ConfigFilter(&hcan2,&can2_filetr);
+	
 }
 
 static int HAL_RCC_CAN1_CLK_ENABLED=0;
@@ -112,9 +150,9 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef* hcan)
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
     /* Peripheral interrupt init */
-    HAL_NVIC_SetPriority(CAN1_TX_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(CAN1_TX_IRQn);
-    HAL_NVIC_SetPriority(CAN1_RX0_IRQn, 0, 0);
+//    HAL_NVIC_SetPriority(CAN1_TX_IRQn, 1, 2);
+//    HAL_NVIC_EnableIRQ(CAN1_TX_IRQn);
+    HAL_NVIC_SetPriority(CAN1_RX0_IRQn, 0, 3);
     HAL_NVIC_EnableIRQ(CAN1_RX0_IRQn);
   /* USER CODE BEGIN CAN1_MspInit 1 */
 
@@ -153,6 +191,54 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef* hcan)
   /* USER CODE END CAN2_MspInit 1 */
   }
 }
+
+
+HAL_StatusTypeDef can_send_msg(uint8_t flag, CAN_HandleTypeDef* hcan, CAN_MessageID _id, int16_t *data){
+	
+	if(flag){
+		
+		hcan->pTxMsg->RTR = CAN_RTR_DATA;
+		hcan->pTxMsg->IDE = CAN_ID_STD;
+		
+		switch(_id){
+			case CAN_IMU_TxID:{
+				hcan->pTxMsg->StdId = CAN_IMU_TxID;
+				hcan->pTxMsg->DLC = 8;
+				hcan->pTxMsg->Data[0] = (uint8_t)(*(data+0)>>8);
+				hcan->pTxMsg->Data[1] = (uint8_t)(*(data+0));
+				hcan->pTxMsg->Data[2] = (uint8_t)(*(data+1)>>8);
+				hcan->pTxMsg->Data[3] = (uint8_t)(*(data+1));
+				hcan->pTxMsg->Data[4] = (uint8_t)(*(data+2)>>8);
+				hcan->pTxMsg->Data[5] = (uint8_t)(*(data+2));
+				hcan->pTxMsg->Data[6] = (uint8_t)(*(data+3)>>8);
+				hcan->pTxMsg->Data[7] = (uint8_t)(*(data+3));
+				break;
+			}
+			default :break;
+		}
+		
+		return HAL_CAN_Transmit(hcan,100);
+	}
+	else return NULL;
+}
+
+void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* hcan)
+{
+   switch(hcan->pRxMsg->StdId){
+		 case CAN_IMU_RxID:{
+			 if(!imu_yaw.flag){
+				 imu_yaw.flag = 1;
+			 }
+			 imu_yaw.yaw = 0.01f *((hcan->pRxMsg->Data[0]<<24) + (hcan->pRxMsg->Data[1]<<16) \
+															+ (hcan->pRxMsg->Data[2] <<8) + (hcan->pRxMsg->Data[3]) );
+			 break ;
+		 }
+		 default :break;
+	 }
+	 __HAL_CAN_ENABLE_IT(hcan,CAN_IT_FMP0);
+}
+
+
 
 void HAL_CAN_MspDeInit(CAN_HandleTypeDef* hcan)
 {

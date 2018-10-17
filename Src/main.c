@@ -121,7 +121,7 @@ int main(void)
   while (1)
   {
   /* USER CODE END WHILE */
-		imu(ENABLE);
+//		imu(ENABLE);
 //		led0_switch;
 //		last_mainCount = main_count;
 //		delayms(count);

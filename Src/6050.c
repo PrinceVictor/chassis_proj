@@ -3,7 +3,6 @@
 
 
 struct _sensor sensor;	
-struct _sensor sensor2;
 
 uint8_t	mpu6050_buffer[16];					
 unsigned char TAddr;
@@ -107,7 +106,6 @@ void Gyro_OFFEST(void)
 	 sensor.gyro.averag.x=0;    //零点偏移清零
 	 sensor.gyro.averag.y=0;  
 	 sensor.gyro.averag.z=0;
-	 sensor2.gyro.averag.z=0;
 	
 	 while(cnt_g--)       //循环采集1000次   求平均
 	 {

@@ -4,27 +4,27 @@
 #include "math.h"
 
 #define GYRO_GAP 30
-#define K_ANGLESPEED_2_ANGLE 0.0000305f
 
-_imu_yaw imu_yaw = {0};
+_imu_yaw imu_yaw = {0,0,0,3000,0};
 _angle angle;
+
+int16_t IMU_TxInit[4] = { 0x0001, 0x0203, 0x0405, 0x0607 };
 
 volatile uint32_t lastUpdate, now; // ²ÉÑùÖÜÆÚ¼ÆÊý µ¥Î» us
 float q0 = 1, q1 = 0, q2 = 0, q3 = 0;    // quaternion elements representing the estimated orientation
 float exInt = 0, eyInt = 0, ezInt = 0;    // scaled integral error
 float Q = 0.02f , R = 6.00f;
+float Gyro_File_Buf[3][GYRO_FILTER_NUM];
+
 static double KalmanFilter_x(const double ,double ,double );
 static double KalmanFilter_y(const double ,double ,double );
 static double KalmanFilter_z(const double ,double ,double );
 static double KalmanFilter_speed(const double ,double ,double );
 
-uint8_t mpu6050_error_flag = 0;
-
-float Gyro_File_Buf[3][GYRO_FILTER_NUM];
-
 uint32_t Get_Time_Micros(void);
 
-float invSqrt(float x) {
+
+	float invSqrt(float x) {
 	float halfx = 0.5f * x;
 	float y = x;
 	long i = *(long*)&y;
@@ -36,12 +36,63 @@ float invSqrt(float x) {
 
 void imu(int8_t flag){
 	readIMU(1);
-	IMUupdate(sensor.gyro.radian.x,
-						sensor.gyro.radian.y,
-						sensor.gyro.radian.z,
-						sensor.acc.averag.x,
-						sensor.acc.averag.y,
-						sensor.acc.averag.z);	
+//	IMUupdate(sensor.gyro.radian.x,
+//						sensor.gyro.radian.y,
+//						sensor.gyro.radian.z,
+//						sensor.acc.averag.x,
+//						sensor.acc.averag.y,
+//						sensor.acc.averag.z);	
+}
+
+/*¸üÐÂË«Öá ½ÇËÙ¶È ½Ç¶È can±àÂëÆ÷ÐÅÏ¢*/
+void readIMU(uint8_t flag)
+{
+	float sumx,sumy,sumz;
+		
+	static uint8_t gyro_filter_cnt = 0;
+		
+	int i =0;
+		
+	if(flag == 0) 
+			return;
+	else
+		{
+		
+		MPU6050_Read();
+		sensor.acc.origin.x = ((((int16_t)mpu6050_buffer[0]) << 8) | mpu6050_buffer[1]) ;
+		sensor.acc.origin.y = ((((int16_t)mpu6050_buffer[2]) << 8) | mpu6050_buffer[3]) ;
+		sensor.acc.origin.z = ((((int16_t)mpu6050_buffer[4]) << 8) | mpu6050_buffer[5]);
+		
+		sensor.gyro.origin.x = ((((int16_t)mpu6050_buffer[8]) << 8) | mpu6050_buffer[9])- sensor.gyro.quiet.x;
+		sensor.gyro.origin.y = ((((int16_t)mpu6050_buffer[10]) << 8)| mpu6050_buffer[11])- sensor.gyro.quiet.y;
+		sensor.gyro.origin.z = ((((int16_t)mpu6050_buffer[12]) << 8)| mpu6050_buffer[13])- sensor.gyro.quiet.z;
+		
+		Gyro_File_Buf[0][gyro_filter_cnt] = sensor.gyro.origin.x ;
+		Gyro_File_Buf[1][gyro_filter_cnt] = sensor.gyro.origin.y ;
+		Gyro_File_Buf[2][gyro_filter_cnt] = sensor.gyro.origin.z ;
+			
+			sumx = 0;
+			sumy = 0;
+			sumz = 0;
+		for(i=0;i<GYRO_FILTER_NUM;i++)
+		{
+			sumx += Gyro_File_Buf[0][i];
+			sumy += Gyro_File_Buf[1][i];
+			sumz += Gyro_File_Buf[2][i];
+		}
+
+		
+		gyro_filter_cnt = ( gyro_filter_cnt + 1 ) % GYRO_FILTER_NUM;
+		
+		sensor.gyro.radian.x  = sumx / (float)GYRO_FILTER_NUM * Gyro_Gr;    //radian speed  unit: pi/s
+		sensor.gyro.radian.y  = sumy / (float)GYRO_FILTER_NUM * Gyro_Gr;
+		sensor.gyro.radian.z  = sumz / (float)GYRO_FILTER_NUM * Gyro_Gr;
+			
+		sensor.acc.averag.x = KalmanFilter_x(sensor.acc.origin.x,KALMAN_Q,KALMAN_R);  // ACC XÖá¿¨¶ûÂüÂË²¨
+		sensor.acc.averag.y = KalmanFilter_y(sensor.acc.origin.y,KALMAN_Q,KALMAN_R);  // ACC YÖá¿¨¶ûÂüÂË²¨
+		sensor.acc.averag.z = KalmanFilter_z(sensor.acc.origin.z,KALMAN_Q,KALMAN_R);  // ACC ZÖá¿¨¶ûÂüÂË²
+	
+	}
 }
 
 void IMUupdate(float gx, float gy, float gz, float ax, float ay, float az)
@@ -68,7 +119,7 @@ void IMUupdate(float gx, float gy, float gz, float ax, float ay, float az)
 	  now = Get_Time_Micros();  //¶ÁÈ¡Ê±¼ä µ¥Î»ÊÇus   
     if(now<lastUpdate)
     {
-			halfT =  ((float)(now + (0xffffffff- lastUpdate)) / 2000000.0f);   //  uint 0.5s
+		//	halfT =  ((float)(now + (0xffffffff- lastUpdate)) / 2000000.0f);   //  uint 0.5s
     }
     else	
     {
@@ -132,56 +183,7 @@ void IMUupdate(float gx, float gy, float gz, float ax, float ay, float az)
     angle.roll= atan2(2 * q2 * q3 + 2 * q0 * q1, -2 * q1 * q1 - 2 * q2* q2 + 1)* RtA; // roll       -pi-----pi 	
 		
 	}
-/*¸üÐÂË«Öá ½ÇËÙ¶È ½Ç¶È can±àÂëÆ÷ÐÅÏ¢*/
-void readIMU(uint8_t flag)
-{
-	float sumx,sumy,sumz;
-		
-	static uint8_t gyro_filter_cnt = 0;
-		
-	int i =0;
-		
-	if(flag == 0) 
-			return;
-	else
-		{
-		
-		MPU6050_Read();
-		sensor.acc.origin.x = ((((int16_t)mpu6050_buffer[0]) << 8) | mpu6050_buffer[1]) ;
-		sensor.acc.origin.y = ((((int16_t)mpu6050_buffer[2]) << 8) | mpu6050_buffer[3]) ;
-		sensor.acc.origin.z = ((((int16_t)mpu6050_buffer[4]) << 8) | mpu6050_buffer[5]);
-		
-		sensor.gyro.origin.x = ((((int16_t)mpu6050_buffer[8]) << 8) | mpu6050_buffer[9])- sensor.gyro.quiet.x;
-		sensor.gyro.origin.y = ((((int16_t)mpu6050_buffer[10]) << 8)| mpu6050_buffer[11])- sensor.gyro.quiet.y;
-		sensor.gyro.origin.z = ((((int16_t)mpu6050_buffer[12]) << 8)| mpu6050_buffer[13])- sensor.gyro.quiet.z;
-		
-		Gyro_File_Buf[0][gyro_filter_cnt] = sensor.gyro.origin.x ;
-		Gyro_File_Buf[1][gyro_filter_cnt] = sensor.gyro.origin.y ;
-		Gyro_File_Buf[2][gyro_filter_cnt] = sensor.gyro.origin.z ;
-			
-			sumx = 0;
-			sumy = 0;
-			sumz = 0;
-		for(i=0;i<GYRO_FILTER_NUM;i++)
-		{
-			sumx += Gyro_File_Buf[0][i];
-			sumy += Gyro_File_Buf[1][i];
-			sumz += Gyro_File_Buf[2][i];
-		}
 
-		
-		gyro_filter_cnt = ( gyro_filter_cnt + 1 ) % GYRO_FILTER_NUM;
-		
-		sensor.gyro.radian.x  = sumx / (float)GYRO_FILTER_NUM * Gyro_Gr;    //radian speed  unit: pi/s
-		sensor.gyro.radian.y  = sumy / (float)GYRO_FILTER_NUM * Gyro_Gr;
-		sensor.gyro.radian.z  = sumz / (float)GYRO_FILTER_NUM * Gyro_Gr;
-			
-		sensor.acc.averag.x = KalmanFilter_x(sensor.acc.origin.x,KALMAN_Q,KALMAN_R);  // ACC XÖá¿¨¶ûÂüÂË²¨
-		sensor.acc.averag.y = KalmanFilter_y(sensor.acc.origin.y,KALMAN_Q,KALMAN_R);  // ACC YÖá¿¨¶ûÂüÂË²¨
-		sensor.acc.averag.z = KalmanFilter_z(sensor.acc.origin.z,KALMAN_Q,KALMAN_R);  // ACC ZÖá¿¨¶ûÂüÂË²
-	
-	}
-}
 
 
 static double KalmanFilter_x(const double ResrcData,double ProcessNiose_Q,double MeasureNoise_R)

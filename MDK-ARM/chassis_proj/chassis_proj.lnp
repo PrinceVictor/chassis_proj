@@ -9,6 +9,7 @@
 "chassis_proj\stm32f4xx_it.o"
 "chassis_proj\core.o"
 "chassis_proj\communi.o"
+"chassis_proj\chassis.o"
 "chassis_proj\pid.o"
 "chassis_proj\imu.o"
 "chassis_proj\i2c.o"

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [chassis_proj\chassis_proj.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image chassis_proj\chassis_proj.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060300: Last Updated: Wed Oct 17 21:25:21 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060300: Last Updated: Thu Oct 18 10:58:50 2018
 <BR><P>
 <H3>Maximum Stack Usage =        148 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -444,11 +444,10 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f405xx.o(RESET)
 </UL>
-<P><STRONG><a name="[1c]"></a>DMA1_Stream6_IRQHandler</STRONG> (Thumb, 124 bytes, Stack size 16 bytes, stm32f4xx_it.o(i.DMA1_Stream6_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = DMA1_Stream6_IRQHandler &rArr; HAL_DMA_IRQHandler
+<P><STRONG><a name="[1c]"></a>DMA1_Stream6_IRQHandler</STRONG> (Thumb, 114 bytes, Stack size 8 bytes, stm32f4xx_it.o(i.DMA1_Stream6_IRQHandler))
+<BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = DMA1_Stream6_IRQHandler &rArr; HAL_DMA_IRQHandler
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_IRQHandler
-<LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Get_Freqz
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f405xx.o(RESET)
 </UL>
@@ -468,7 +467,6 @@ Global Symbols
 </UL>
 <P><STRONG><a name="[6d]"></a>Get_Freqz</STRONG> (Thumb, 50 bytes, Stack size 0 bytes, tim.o(i.Get_Freqz))
 <BR><BR>[Called By]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Core_Task
-<LI><a href="#[1c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA1_Stream6_IRQHandler
 </UL>
 
 <P><STRONG><a name="[70]"></a>Gyro_OFFEST</STRONG> (Thumb, 182 bytes, Stack size 40 bytes, 6050.o(i.Gyro_OFFEST))
@@ -1073,7 +1071,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[bd]"></a>MX_USART2_UART_Init</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, usart.o(i.MX_USART2_UART_Init))
+<P><STRONG><a name="[bd]"></a>MX_USART2_UART_Init</STRONG> (Thumb, 32 bytes, Stack size 0 bytes, usart.o(i.MX_USART2_UART_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = MX_USART2_UART_Init &rArr; HAL_UART_Init &rArr; HAL_UART_MspInit &rArr; HAL_GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Init
@@ -1233,7 +1231,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[6e]"></a>Usart_Tx</STRONG> (Thumb, 180 bytes, Stack size 32 bytes, core.o(i.Usart_Tx))
+<P><STRONG><a name="[6e]"></a>Usart_Tx</STRONG> (Thumb, 186 bytes, Stack size 32 bytes, core.o(i.Usart_Tx))
 <BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = Usart_Tx &rArr; HAL_UART_Transmit_DMA &rArr; HAL_DMA_Start_IT &rArr; DMA_SetConfig
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit_DMA

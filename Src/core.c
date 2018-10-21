@@ -21,7 +21,7 @@ extern uint8_t uart2_tx_busyFlag;
 _sysState sys = { 0 };
 
 void YawUpdate(uint8_t);
-HAL_StatusTypeDef Usart_Tx(uint8_t* , Tx_Mode , UART_HandleTypeDef *, uint8_t* ,uint16_t );
+uint8_t Usart_Tx(uint8_t* , Tx_Mode , UART_HandleTypeDef *, uint8_t* ,uint16_t );
 
 uint8_t RemoteFeed(uint8_t);
 uint32_t Get_Freqz(Freqz*);
@@ -93,7 +93,7 @@ uint8_t RemoteFeed(uint8_t flag){
 }
 
 
-HAL_StatusTypeDef Usart_Tx(uint8_t* flag, Tx_Mode mode, UART_HandleTypeDef *huart, uint8_t* tx_data,uint16_t size){
+uint8_t Usart_Tx(uint8_t* flag, Tx_Mode mode, UART_HandleTypeDef *huart, uint8_t* tx_data,uint16_t size){
 	uint8_t data[size];
 	if(!(*flag)){
 			switch(mode){
@@ -122,12 +122,13 @@ HAL_StatusTypeDef Usart_Tx(uint8_t* flag, Tx_Mode mode, UART_HandleTypeDef *huar
 					data[17] = sensor.acc.origin.z ;
 					data[18] = 0xc0;
 					memcpy(tx_data , data, size);
+					HAL_UART_Transmit_DMA(huart,tx_data,size);
+					__HAL_DMA_ENABLE(&hdma_usart2_tx);
 					break;
 				}
 				default :break;
 			}
 			*flag = 1;
-			return HAL_UART_Transmit_DMA(huart,tx_data,size);
 	}
-	return NULL;
+	return *flag;
 }

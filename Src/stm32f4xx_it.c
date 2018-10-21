@@ -234,9 +234,10 @@ void DMA1_Stream6_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Stream6_IRQn 0 */
 	if(__HAL_DMA_GET_FLAG(&hdma_usart2_tx,DMA_FLAG_TCIF2_6)!=RESET){
 		__HAL_DMA_CLEAR_FLAG(&hdma_usart2_tx,DMA_FLAG_TCIF2_6);
+		__HAL_DMA_DISABLE(&hdma_usart2_tx);
 		uart2_tx_busyFlag = 0;
-		Get_Freqz(&usart2_tx_interrupt_fs);
-		__HAL_DMA_ENABLE(&hdma_usart2_tx);
+		//Get_Freqz(&usart2_tx_interrupt_fs);
+		//__HAL_DMA_ENABLE(&hdma_usart2_tx);
 	}
   /* USER CODE END DMA1_Stream6_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_usart2_tx);

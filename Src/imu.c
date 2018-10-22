@@ -7,7 +7,7 @@
 
 _imu_yaw imu_yaw = {0,0,0,3000,0,100};
 _angle angle;
-
+_angle dmp_angle;
 int16_t IMU_TxInit[4] = { 0x0001, 0x0203, 0x0405, 0x0607 };
 
 volatile uint32_t lastUpdate, now; // 采样周期计数 单位 us
@@ -68,7 +68,7 @@ void readIMU(uint8_t flag)
 		sensor.gyro.origin.x = ((((int16_t)mpu6050_buffer[8]) << 8) | mpu6050_buffer[9])- sensor.gyro.quiet.x;
 		sensor.gyro.origin.y = ((((int16_t)mpu6050_buffer[10]) << 8)| mpu6050_buffer[11])- sensor.gyro.quiet.y;
 		sensor.gyro.origin.z = ((((int16_t)mpu6050_buffer[12]) << 8)| mpu6050_buffer[13])- sensor.gyro.quiet.z;
-#if 0	
+#if 0
 		Gyro_File_Buf[0][gyro_filter_cnt] = sensor.gyro.origin.x ;
 		Gyro_File_Buf[1][gyro_filter_cnt] = sensor.gyro.origin.y ;
 		Gyro_File_Buf[2][gyro_filter_cnt] = sensor.gyro.origin.z ;

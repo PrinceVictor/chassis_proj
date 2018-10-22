@@ -305,6 +305,7 @@ void TIM3_IRQHandler(void)
 static uint32_t tim4_count = 0;
 uint32_t core_count = 0;
 uint8_t check_flag;
+extern uint8_t main_flag;
 
 void TIM4_IRQHandler(void)
 {
@@ -314,6 +315,10 @@ void TIM4_IRQHandler(void)
 	if(tim4_count>1000){
 		led1_switch;
 		tim4_count = 0;
+		if(main_flag){
+			led0_switch;
+			main_flag = 0;
+		}
 	}
 	check_flag = Core_Task(ENABLE, &core_count);
   /* USER CODE END TIM4_IRQn 0 */

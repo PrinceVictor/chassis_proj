@@ -295,6 +295,66 @@ unsigned char Single_Read(unsigned char SlaveAddress,unsigned char REG_Address)
 }	
 /**
   * @}
-  */
-
+//  */
+//uint8_t MPU_Write_Len(uint8_t addr,uint8_t reg,uint8_t len,uint8_t *buf)
+//{
+//	uint8_t i; 
+//    I2C_Start(); 
+//	I2C_SendByte((addr<<1)|0);//发送器件地址+写命令	
+//	if(I2C_WaitAck())	//等待应答
+//	{
+//		I2C_Stop();		 
+//		return 1;		
+//	}
+//    I2C_SendByte(reg);	//写寄存器地址
+//    I2C_WaitAck();		//等待应答
+//	for(i=0;i<len;i++)
+//	{
+//		I2C_SendByte(buf[i]);	//发送数据
+//		if(I2C_WaitAck())		//等待ACK
+//		{
+//			I2C_Stop();	 
+//			return 1;		 
+//		}		
+//	}    
+//    I2C_Stop();	 
+//	return 0;	
+//} 
+////IIC连续读
+////addr:器件地址
+////reg:要读取的寄存器地址
+////len:要读取的长度
+////buf:读取到的数据存储区
+////返回值:0,正常
+////    其他,错误代码
+//uint8_t MPU_Read_Len(uint8_t addr,uint8_t reg,uint8_t len,uint8_t *buf)
+//{ 
+// 	I2C_Start(); 
+//	I2C_SendByte((addr<<1)|0);//发送器件地址+写命令	
+//	if(I2C_WaitAck())	//等待应答
+//	{
+//		I2C_Stop();		 
+//		return 1;		
+//	}
+//    I2C_SendByte(reg);	//写寄存器地址
+//    I2C_WaitAck();		//等待应答
+//    I2C_Start();
+//	I2C_SendByte((addr<<1)|1);//发送器件地址+读命令	
+//    I2C_WaitAck();		//等待应答 
+//	while(len)
+//	{
+//		if(len==1){
+//			*buf=I2C_RadeByte();//读数据,发送nACK 
+//			I2C_NoAck();
+//		}
+//		else {
+//			*buf=I2C_RadeByte();		//读数据,发送ACK  
+//			I2C_Ack();
+//		}
+//		len--;
+//		buf++; 
+//	}    
+//    I2C_Stop();	//产生一个停止条件 
+//	return 0;	
+//}
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

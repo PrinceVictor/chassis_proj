@@ -40,6 +40,9 @@
 #include "communi.h"
 #include "i2c.h"
 #include "core.h"
+#include "inv_mpu.h"
+#include "inv_mpu_dmp_motion_driver.h"
+#include "imu.h"
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -48,7 +51,7 @@
 Freqz Main_fs;
 
 uint16_t count =0;
-
+uint8_t main_flag =0;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
@@ -107,22 +110,30 @@ int main(void)
 	
 	led_config();
 	
-	
-  /* USER CODE END 2 */
 
+  /* USER CODE END 2 */
+	
   /* Infinite loop */
 	led0_on;
 	led1_off;
 	
 	Remote_rx_start(ENABLE);
 	Usart2_rx_start(ENABLE);
+	
+	while(mpu_dmp_init()){
+	}
+	
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+		
   /* USER CODE END WHILE */
+		
 		imu(ENABLE);
-//		Get_Freqz(&Main_fs);
-//		led0_switch;
+		mpu_dmp_get_data(&dmp_angle.pitch, &dmp_angle.roll,&dmp_angle.yaw);
+		main_flag = 1;
+		Get_Freqz(&Main_fs);
+		
 //		last_mainCount = main_count;
 //		delayms(count);
 

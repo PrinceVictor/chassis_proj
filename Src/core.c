@@ -105,22 +105,36 @@ uint8_t Usart_Tx(uint8_t* flag, Tx_Mode mode, UART_HandleTypeDef *huart, uint8_t
 					data[2] = BYTE1(*(&imu_yaw.yaw));
 					data[3] = BYTE2(*(&imu_yaw.yaw));
 					data[4] = BYTE3(*(&imu_yaw.yaw));
-					//int16 mpu6050 gyro data
+					//int16 mpu6050 dmp data 
 					data[5] = 0xb0;
-					data[6] = sensor.gyro.origin.x >> 8;
-					data[7] = sensor.gyro.origin.x ;
-					data[8] = sensor.gyro.origin.y >> 8;
-					data[9] = sensor.gyro.origin.y ;
-					data[10] = sensor.gyro.origin.z >> 8;
-					data[11] = sensor.gyro.origin.z ;
-					//int16 mpu6050 Accelerometer data
-					data[12] = sensor.acc.origin.x >> 8;
-					data[13] = sensor.acc.origin.x ;
-					data[14] = sensor.acc.origin.y >> 8;
-					data[15] = sensor.acc.origin.y ;
-					data[16] = sensor.acc.origin.z >> 8;
-					data[17] = sensor.acc.origin.z ;
+					data[6] = BYTE0(*(&dmp_angle.yaw));  
+					data[7] = BYTE1(*(&dmp_angle.yaw));
+					data[8] = BYTE2(*(&dmp_angle.yaw));
+					data[9] = BYTE3(*(&dmp_angle.yaw));
+					data[10] = BYTE0(*(&dmp_angle.pitch));  
+					data[11] = BYTE1(*(&dmp_angle.pitch));
+					data[12] = BYTE2(*(&dmp_angle.pitch));
+					data[13] = BYTE3(*(&dmp_angle.pitch));
+					data[14] = BYTE0(*(&dmp_angle.roll));  
+					data[15] = BYTE1(*(&dmp_angle.roll));
+					data[16] = BYTE2(*(&dmp_angle.roll));
+					data[17] = BYTE3(*(&dmp_angle.roll));
+					//int16 mpu6050 gyro data
 					data[18] = 0xc0;
+					data[19] = sensor.gyro.origin.x >> 8;
+					data[20] = sensor.gyro.origin.x ;
+					data[21] = sensor.gyro.origin.y >> 8;
+					data[22] = sensor.gyro.origin.y ;
+					data[23] = sensor.gyro.origin.z >> 8;
+					data[24] = sensor.gyro.origin.z ;
+					//int16 mpu6050 Accelerometer data
+					data[25] = sensor.acc.origin.x >> 8;
+					data[26] = sensor.acc.origin.x ;
+					data[27] = sensor.acc.origin.y >> 8;
+					data[28] = sensor.acc.origin.y ;
+					data[29] = sensor.acc.origin.z >> 8;
+					data[30] = sensor.acc.origin.z ;
+					data[31] = 0xd0;
 					memcpy(tx_data , data, size);
 					HAL_UART_Transmit_DMA(huart,tx_data,size);
 					__HAL_DMA_ENABLE(&hdma_usart2_tx);

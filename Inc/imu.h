@@ -37,7 +37,7 @@ void readIMU(uint8_t);
 void imu(int8_t);
 extern _imu_yaw imu_yaw;
 extern _angle angle;
-
+extern _angle dmp_angle;
 
 #ifdef __cplusplus
 }

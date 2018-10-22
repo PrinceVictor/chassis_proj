@@ -41,3 +41,6 @@ chassis_proj\main.o: ../Inc/gpio.h
 chassis_proj\main.o: ../Inc/communi.h
 chassis_proj\main.o: ../Inc/i2c.h
 chassis_proj\main.o: ../Inc/core.h
+chassis_proj\main.o: ..\Src\dmp\inv_mpu.h
+chassis_proj\main.o: ..\Src\dmp\inv_mpu_dmp_motion_driver.h
+chassis_proj\main.o: ../Inc/imu.h

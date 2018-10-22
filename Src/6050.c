@@ -22,6 +22,15 @@ void delayms(uint32_t count)
    }  
 }
 
+void delayus(uint32_t count)
+{ 
+	uint32_t time_count = count *27;
+   while(time_count--) 
+   { 
+			__NOP; 
+   }  
+}
+
 uint8_t InitMPU6050(void)
 {
 	//unsigned char TAddr;

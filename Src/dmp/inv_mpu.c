@@ -2969,7 +2969,7 @@ u8 mpu_dmp_init(void)
 		    DMP_FEATURE_ANDROID_ORIENT|DMP_FEATURE_SEND_RAW_ACCEL|DMP_FEATURE_SEND_CAL_GYRO|
 		    DMP_FEATURE_GYRO_CAL);
 		if(res)return 6; 
-		res=dmp_set_fifo_rate(DEFAULT_MPU_HZ);	//设置DMP输出速率(最大不超过200Hz)
+		res=dmp_set_fifo_rate(100);	//设置DMP输出速率(最大不超过200Hz)
 		if(res)return 7;   
 		res=run_self_test();		//自检
 		if(res)return 8;    

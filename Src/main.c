@@ -131,8 +131,8 @@ int main(void)
 		
 		imu(ENABLE);
 		mpu_dmp_get_data(&dmp_angle.pitch, &dmp_angle.roll,&dmp_angle.yaw);
-		main_flag = 1;
-		Get_Freqz(&Main_fs);
+//		main_flag = 1;
+//		Get_Freqz(&Main_fs);
 		
 //		last_mainCount = main_count;
 //		delayms(count);

@@ -37,6 +37,7 @@
 #define MAG_ZOUT_H		0x08
 
 #define	PWR_MGMT_1		0x6B	 //电源管理，典型值：0x00(正常启用)
+#define	PWR_MGMT_2		0x6C	 //电源管理，典型值：0x00(正常启用)
 #define	WHO_AM_I		  0x75	   //IIC地址寄存器(默认数值0x68，只读)
 
 #define	MPU6050_ADDRESS  0xD0	  //陀螺地址

@@ -1,5 +1,5 @@
 Dependencies for Project 'chassis_proj', Target 'chassis_proj': (DO NOT MODIFY !)
-F (../Src/main.c)(0x5BCD5826)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Src\dmp --C99-IF:\master\learing_trainging\blank_proj\chassis_proj\MDK-ARM\RTE-ID:\Keil5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-ID:\Keil5\ARM\PACK\Keil\STM32F4xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="521" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx --C99-o chassis_proj\main.o --omf_browse chassis_proj\main.crf --depend chassis_proj\main.d)
+F (../Src/main.c)(0x5BCE75A1)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Src\dmp --C99-IF:\master\learing_trainging\blank_proj\chassis_proj\MDK-ARM\RTE-ID:\Keil5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-ID:\Keil5\ARM\PACK\Keil\STM32F4xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="521" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx --C99-o chassis_proj\main.o --omf_browse chassis_proj\main.crf --depend chassis_proj\main.d)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x5BBEE5EB)
 I (../Inc/stm32f4xx_hal_conf.h)(0x5BC5A14B)
 I (../Inc/mxconstants.h)(0x5BC0779A)
@@ -41,7 +41,7 @@ I (../Inc/gpio.h)(0x5BC1FEA6)
 I (../Inc/communi.h)(0x5BC311B6)
 I (../Inc/i2c.h)(0x5BCD4BF5)
 I (../Inc/core.h)(0x5BC6F9BF)
-I (..\Src\dmp\inv_mpu.h)(0x5BCC8B64)
+I (..\Src\dmp\inv_mpu.h)(0x5BD036F8)
 I (..\Src\dmp\inv_mpu_dmp_motion_driver.h)(0x5710F3A0)
 I (../Inc/imu.h)(0x5BCC83E9)
 F (../Src/gpio.c)(0x5BC400A1)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Src\dmp --C99-IF:\master\learing_trainging\blank_proj\chassis_proj\MDK-ARM\RTE-ID:\Keil5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-ID:\Keil5\ARM\PACK\Keil\STM32F4xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="521" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx --C99-o chassis_proj\gpio.o --omf_browse chassis_proj\gpio.crf --depend chassis_proj\gpio.d)
@@ -339,7 +339,7 @@ I (../Inc/gpio.h)(0x5BC1FEA6)
 I (../Inc/can.h)(0x5BC69D6C)
 I (../Inc/imu.h)(0x5BCC83E9)
 I (../Inc/usart.h)(0x5BCD556C)
-I (../Inc/6050.h)(0x5BC4263A)
+I (../Inc/6050.h)(0x5BD036F8)
 I (D:\Keil5\ARM\ARMCC\include\string.h)(0x574E3E26)
 I (../Inc/tim.h)(0x5BC72537)
 F (..\Src\communi.c)(0x5BC32D1F)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Src\dmp --C99-IF:\master\learing_trainging\blank_proj\chassis_proj\MDK-ARM\RTE-ID:\Keil5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-ID:\Keil5\ARM\PACK\Keil\STM32F4xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="521" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx --C99-o chassis_proj\communi.o --omf_browse chassis_proj\communi.crf --depend chassis_proj\communi.d)
@@ -413,7 +413,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x5BBEE5EB)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x5BBEE5EB)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x5BBEE5EB)
 I (../Inc/pid.h)(0x5BC32E5F)
-I (../Inc/6050.h)(0x5BC4263A)
+I (../Inc/6050.h)(0x5BD036F8)
 F (..\Src\pid.c)(0x5BC3310B)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Src\dmp --C99-IF:\master\learing_trainging\blank_proj\chassis_proj\MDK-ARM\RTE-ID:\Keil5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-ID:\Keil5\ARM\PACK\Keil\STM32F4xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="521" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx --C99-o chassis_proj\pid.o --omf_browse chassis_proj\pid.crf --depend chassis_proj\pid.d)
 I (../Inc/pid.h)(0x5BC32E5F)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x5BBEE5EB)
@@ -485,7 +485,7 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x5BBEE5EB)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x5BBEE5EB)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x5BBEE5EB)
 I (../Inc/i2c.h)(0x5BCD4BF5)
-I (../Inc/6050.h)(0x5BC4263A)
+I (../Inc/6050.h)(0x5BD036F8)
 I (D:\Keil5\ARM\ARMCC\include\math.h)(0x574E3E26)
 F (..\Src\i2c.c)(0x5BCD4BF5)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Src\dmp --C99-IF:\master\learing_trainging\blank_proj\chassis_proj\MDK-ARM\RTE-ID:\Keil5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-ID:\Keil5\ARM\PACK\Keil\STM32F4xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="521" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx --C99-o chassis_proj\i2c.o --omf_browse chassis_proj\i2c.crf --depend chassis_proj\i2c.d)
 I (../Inc/i2c.h)(0x5BCD4BF5)
@@ -523,8 +523,8 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x5BBEE5EB)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x5BBEE5EB)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x5BBEE5EB)
 I (../Inc/gpio.h)(0x5BC1FEA6)
-F (..\Src\6050.c)(0x5BCD4D45)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Src\dmp --C99-IF:\master\learing_trainging\blank_proj\chassis_proj\MDK-ARM\RTE-ID:\Keil5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-ID:\Keil5\ARM\PACK\Keil\STM32F4xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="521" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx --C99-o chassis_proj\6050.o --omf_browse chassis_proj\6050.crf --depend chassis_proj\6050.d)
-I (../Inc/6050.h)(0x5BC4263A)
+F (..\Src\6050.c)(0x5BD05C4A)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Src\dmp --C99-IF:\master\learing_trainging\blank_proj\chassis_proj\MDK-ARM\RTE-ID:\Keil5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-ID:\Keil5\ARM\PACK\Keil\STM32F4xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="521" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx --C99-o chassis_proj\6050.o --omf_browse chassis_proj\6050.crf --depend chassis_proj\6050.d)
+I (../Inc/6050.h)(0x5BD036F8)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x5BBEE5EB)
 I (../Inc/stm32f4xx_hal_conf.h)(0x5BC5A14B)
 I (../Inc/mxconstants.h)(0x5BC0779A)
@@ -559,13 +559,13 @@ I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x5BBEE5EB)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x5BBEE5EB)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x5BBEE5EB)
 I (../Inc/i2c.h)(0x5BCD4BF5)
-F (..\Src\dmp\inv_mpu.c)(0x5BCD514E)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Src\dmp --C99-IF:\master\learing_trainging\blank_proj\chassis_proj\MDK-ARM\RTE-ID:\Keil5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-ID:\Keil5\ARM\PACK\Keil\STM32F4xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="521" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx --C99-o chassis_proj\inv_mpu.o --omf_browse chassis_proj\inv_mpu.crf --depend chassis_proj\inv_mpu.d)
+F (..\Src\dmp\inv_mpu.c)(0x5BD03BF2)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O3 --apcs=interwork --split_sections -I ../Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Include -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ..\Src\dmp --C99-IF:\master\learing_trainging\blank_proj\chassis_proj\MDK-ARM\RTE-ID:\Keil5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include-ID:\Keil5\ARM\PACK\Keil\STM32F4xx_DFP\2.9.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="521" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx --C99-o chassis_proj\inv_mpu.o --omf_browse chassis_proj\inv_mpu.crf --depend chassis_proj\inv_mpu.d)
 I (D:\Keil5\ARM\ARMCC\include\stdio.h)(0x574E3E26)
 I (D:\Keil5\ARM\ARMCC\include\stdint.h)(0x574E3E26)
 I (D:\Keil5\ARM\ARMCC\include\stdlib.h)(0x574E3E26)
 I (D:\Keil5\ARM\ARMCC\include\string.h)(0x574E3E26)
 I (D:\Keil5\ARM\ARMCC\include\math.h)(0x574E3E26)
-I (..\Src\dmp\inv_mpu.h)(0x5BCC8B64)
+I (..\Src\dmp\inv_mpu.h)(0x5BD036F8)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x5BBEE5D4)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f405xx.h)(0x5BBEE5D4)
 I (../Drivers/CMSIS/Include/core_cm4.h)(0x5BBEE5EA)
@@ -606,7 +606,7 @@ I (D:\Keil5\ARM\ARMCC\include\stdint.h)(0x574E3E26)
 I (D:\Keil5\ARM\ARMCC\include\stdlib.h)(0x574E3E26)
 I (D:\Keil5\ARM\ARMCC\include\string.h)(0x574E3E26)
 I (D:\Keil5\ARM\ARMCC\include\math.h)(0x574E3E26)
-I (..\Src\dmp\inv_mpu.h)(0x5BCC8B64)
+I (..\Src\dmp\inv_mpu.h)(0x5BD036F8)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x5BBEE5D4)
 I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f405xx.h)(0x5BBEE5D4)
 I (../Drivers/CMSIS/Include/core_cm4.h)(0x5BBEE5EA)

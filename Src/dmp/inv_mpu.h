@@ -24,7 +24,7 @@
 
 #define u8 uint8_t
 //定义输出速度
-#define DEFAULT_MPU_HZ  (100)		//100Hz
+#define DEFAULT_MPU_HZ  (1000)		//100Hz
 
 #define INV_X_GYRO      (0x40)
 #define INV_Y_GYRO      (0x20)

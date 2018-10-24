@@ -3,7 +3,7 @@
 <title>Static Call Graph - [chassis_proj\chassis_proj.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image chassis_proj\chassis_proj.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060300: Last Updated: Mon Oct 22 12:55:03 2018
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060300: Last Updated: Wed Oct 24 19:49:31 2018
 <BR><P>
 <H3>Maximum Stack Usage =        336 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -650,7 +650,6 @@ Global Symbols
 </UL>
 <P><STRONG><a name="[80]"></a>Get_Freqz</STRONG> (Thumb, 50 bytes, Stack size 0 bytes, tim.o(i.Get_Freqz))
 <BR><BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Core_Task
-<LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[83]"></a>Gyro_OFFEST</STRONG> (Thumb, 182 bytes, Stack size 40 bytes, 6050.o(i.Gyro_OFFEST))
@@ -1230,7 +1229,7 @@ Global Symbols
 <LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MPU_Read_Len
 </UL>
 
-<P><STRONG><a name="[cb]"></a>InitMPU6050</STRONG> (Thumb, 150 bytes, Stack size 16 bytes, 6050.o(i.InitMPU6050))
+<P><STRONG><a name="[cb]"></a>InitMPU6050</STRONG> (Thumb, 160 bytes, Stack size 16 bytes, 6050.o(i.InitMPU6050))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = InitMPU6050 &rArr; Single_Read &rArr; I2C_RadeByte
 </UL>
 <BR>[Calls]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayms
@@ -1910,7 +1909,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[59]"></a>main</STRONG> (Thumb, 144 bytes, Stack size 0 bytes, main.o(i.main))
+<P><STRONG><a name="[59]"></a>main</STRONG> (Thumb, 132 bytes, Stack size 0 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 336<LI>Call Chain = main &rArr; mpu_dmp_get_data &rArr; __hardfp_atan2 &rArr; atan &rArr; __hardfp_atan &rArr; __kernel_poly &rArr; __aeabi_dmul &rArr; _double_epilogue &rArr; _double_round
 </UL>
 <BR>[Calls]<UL><LI><a href="#[11d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mpu_dmp_init
@@ -1934,7 +1933,6 @@ Global Symbols
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
 <LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Gyro_OFFEST
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Get_Freqz
 <LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry9a.o(.ARM.Collect$$$$0000000B)
@@ -1974,7 +1972,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[11d]"></a>mpu_dmp_init</STRONG> (Thumb, 160 bytes, Stack size 8 bytes, inv_mpu.o(i.mpu_dmp_init))
+<P><STRONG><a name="[11d]"></a>mpu_dmp_init</STRONG> (Thumb, 162 bytes, Stack size 8 bytes, inv_mpu.o(i.mpu_dmp_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 288<LI>Call Chain = mpu_dmp_init &rArr; run_self_test &rArr; mpu_run_self_test &rArr; mpu_set_dmp_state &rArr; mpu_set_sample_rate &rArr; mpu_lp_accel_mode &rArr; mpu_configure_fifo &rArr; mpu_reset_fifo &rArr; MPU_Write_Len &rArr; IIC_Wait_Ack &rArr; IIC_Stop
 </UL>
 <BR>[Calls]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_Init

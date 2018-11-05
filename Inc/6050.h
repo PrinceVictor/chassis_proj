@@ -51,8 +51,8 @@
 #define	GYRO_Z		0x47
 
 #define Acc_G 		0.0011963f		//  1/32768/4/9.8     加速度量程为4G		
-#define Gyro_G 		0.03051756f	//  1/32768/1000      陀螺仪量程为 +—1000			
-#define Gyro_Gr		0.0005327f   //  1/32768/1000/57.3 
+#define Gyro_G 		0.06103515f	//  1/32768/1000      陀螺仪量程为 +—1000			
+#define Gyro_Gr		0.00106519f   //  1/32768/1000/57.3 
 
 typedef struct{
 				float X;

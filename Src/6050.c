@@ -47,15 +47,15 @@ uint8_t InitMPU6050(void)
 	}while(TAddr!=0x68);
 	
 	date = Single_Write(MPU6050_ADDRESS, PWR_MGMT_1, 0x01);  	   //解除休眠状态0x00
-	delayms(50);
+	delayms(10);
 	date += Single_Write(MPU6050_ADDRESS, SMPLRT_DIV, 0x00);     //采样频率（1KHz）
-	delayms(50);
+	delayms(10);
 	date += Single_Write(MPU6050_ADDRESS, CONFIG, 0x02);         //低通滤波0x00
-	delayms(50);
+	delayms(10);
 	date += Single_Write(MPU6050_ADDRESS, GYRO_CONFIG, 0x10);    //陀螺仪量程 
-	delayms(50);
-	date += Single_Write(MPU6050_ADDRESS, ACCEL_CONFIG, 0x09);   //加速度量程 
-	delayms(50);
+	delayms(10);
+	date += Single_Write(MPU6050_ADDRESS, ACCEL_CONFIG, 0x08);   //加速度量程 
+	delayms(10);
 	date += Single_Write(MPU6050_ADDRESS, PWR_MGMT_2, 0x00);   
 	
 	return date;

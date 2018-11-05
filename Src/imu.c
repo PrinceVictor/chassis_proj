@@ -36,7 +36,7 @@ uint32_t Get_Time_Micros(void);
 
 void imu(int8_t flag){
 	readIMU(1);
-#if 0	
+#if 1
 	IMUupdate(sensor.gyro.radian.x,
 						sensor.gyro.radian.y,
 						sensor.gyro.radian.z,
@@ -65,13 +65,13 @@ void readIMU(uint8_t flag)
 		sensor.acc.origin.y = ((((int16_t)mpu6050_buffer[2]) << 8) | mpu6050_buffer[3]) ;
 		sensor.acc.origin.z = ((((int16_t)mpu6050_buffer[4]) << 8) | mpu6050_buffer[5]);
 		
-		sensor.gyro.origin.x = ((((int16_t)mpu6050_buffer[8]) << 8) | mpu6050_buffer[9])- sensor.gyro.quiet.x;
-		sensor.gyro.origin.y = ((((int16_t)mpu6050_buffer[10]) << 8)| mpu6050_buffer[11])- sensor.gyro.quiet.y;
-		sensor.gyro.origin.z = ((((int16_t)mpu6050_buffer[12]) << 8)| mpu6050_buffer[13])- sensor.gyro.quiet.z;
-#if 0
-		Gyro_File_Buf[0][gyro_filter_cnt] = sensor.gyro.origin.x ;
-		Gyro_File_Buf[1][gyro_filter_cnt] = sensor.gyro.origin.y ;
-		Gyro_File_Buf[2][gyro_filter_cnt] = sensor.gyro.origin.z ;
+		sensor.gyro.origin.x = ((((int16_t)mpu6050_buffer[8]) << 8) | mpu6050_buffer[9]);
+		sensor.gyro.origin.y = ((((int16_t)mpu6050_buffer[10]) << 8)| mpu6050_buffer[11]);
+		sensor.gyro.origin.z = ((((int16_t)mpu6050_buffer[12]) << 8)| mpu6050_buffer[13]);
+#if 1
+		Gyro_File_Buf[0][gyro_filter_cnt] = sensor.gyro.origin.x- sensor.gyro.quiet.x ;
+		Gyro_File_Buf[1][gyro_filter_cnt] = sensor.gyro.origin.y- sensor.gyro.quiet.y ;
+		Gyro_File_Buf[2][gyro_filter_cnt] = sensor.gyro.origin.z- sensor.gyro.quiet.z ;
 			
 			sumx = 0;
 			sumy = 0;
@@ -121,11 +121,11 @@ void IMUupdate(float gx, float gy, float gz, float ax, float ay, float az)
 	  now = TIM2->CNT;  //读取时间 单位是us   
     if(now<lastUpdate)
     {
-			halfT =  ((float)(now + (0xffffffff- lastUpdate)) / 500000.0f);   //  uint 0.5s
+			halfT =  ((float)(now + (0xffffffff- lastUpdate)) / 2000000.0f);   //  uint 0.5s
     }
     else	
     {
-       halfT =  ((float)(now - lastUpdate) / 500000.0f);   //????
+       halfT =  ((float)(now - lastUpdate) / 2000000.0f);   //????
     }
     lastUpdate = now;	//更新时间
 

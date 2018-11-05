@@ -52,6 +52,7 @@ Freqz Main_fs;
 
 uint16_t count =0;
 uint8_t main_flag =0;
+uint8_t mian_func_start = 0;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
@@ -106,8 +107,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	IIC_Init();
 	InitMPU6050();
-	Gyro_OFFEST();
-	
+
+
 	led_config();
 	
 
@@ -123,15 +124,19 @@ int main(void)
 	while(mpu_dmp_init()){
 	}
 	
+	Gyro_OFFEST();
+	
+	
+//	
   /* USER CODE BEGIN WHILE */
   while (1)
   {
 		
   /* USER CODE END WHILE */
-		
+		mian_func_start = 1;
 		imu(ENABLE);
 		mpu_dmp_get_data(&dmp_angle.pitch, &dmp_angle.roll,&dmp_angle.yaw);
-//		main_flag = 1;
+		main_flag = 1;
 //		Get_Freqz(&Main_fs);
 		
 //		last_mainCount = main_count;

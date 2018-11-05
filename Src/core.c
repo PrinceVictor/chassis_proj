@@ -18,6 +18,8 @@ extern uint8_t usart2_tx_buffer[usart2_tx_bufferLength];
 extern uint8_t remote_rx_buffer[18];
 extern int16_t IMU_TxInit[4];
 extern uint8_t uart2_tx_busyFlag;
+
+extern uint8_t mian_func_start;
 _sysState sys = { 0 };
 
 void YawUpdate(uint8_t);
@@ -45,7 +47,7 @@ uint8_t Core_Task(uint8_t flag, uint32_t* time_count){
 				else{
 					imu_yaw.count = 3000; // require that complete the reset IMU device in 3 seconds
 				}
-				if(imu_yaw.flag) sys.state	= run;
+				if(imu_yaw.flag && mian_func_start) sys.state	= run;
 				
 				break;
 			}
@@ -56,13 +58,12 @@ uint8_t Core_Task(uint8_t flag, uint32_t* time_count){
 						*time_count = 0;
 				}
 				
-				if(RemoteFeed(Readremote(remote_rx_buffer))){
-					
+				if(RemoteFeed(Readremote(remote_rx_buffer))){		
 				}
 				else{
 					
 				}
-				Get_Freqz(&tim4_fs);
+				//Get_Freqz(&tim4_fs);
 				//YawUpdate(ENABLE);
 				Usart_Tx(&uart2_tx_busyFlag, Attitude_dataUpload, &huart2, usart2_tx_buffer, usart2_tx_bufferLength);
 				break;
@@ -135,6 +136,19 @@ uint8_t Usart_Tx(uint8_t* flag, Tx_Mode mode, UART_HandleTypeDef *huart, uint8_t
 					data[29] = sensor.acc.origin.z >> 8;
 					data[30] = sensor.acc.origin.z ;
 					data[31] = 0xd0;
+					data[32] = BYTE0(*(&angle.yaw));  
+					data[33] = BYTE1(*(&angle.yaw));
+					data[34] = BYTE2(*(&angle.yaw));
+					data[35] = BYTE3(*(&angle.yaw));
+					data[36] = BYTE0(*(&angle.pitch));  
+					data[37] = BYTE1(*(&angle.pitch));
+					data[38] = BYTE2(*(&angle.pitch));
+					data[39] = BYTE3(*(&angle.pitch));
+					data[40] = BYTE0(*(&angle.roll));  
+					data[41] = BYTE1(*(&angle.roll));
+					data[42] = BYTE2(*(&angle.roll));
+					data[43] = BYTE3(*(&angle.roll));
+					data[44] = 0xe0;
 					memcpy(tx_data , data, size);
 					HAL_UART_Transmit_DMA(huart,tx_data,size);
 					__HAL_DMA_ENABLE(&hdma_usart2_tx);

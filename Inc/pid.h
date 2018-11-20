@@ -11,7 +11,7 @@ typedef struct pid_Para{
 	uint8_t d_flag;
 	float ki_limit;
 	float outlimit;
-	uint8_t flag;
+	uint8_t modeFlag;
 }_pid_Para;
 
 typedef struct pid_Out{
@@ -28,7 +28,7 @@ typedef struct pid_Out{
 
 typedef struct pid{
 	_pid_Out pid;
-	_pid_Para  k_para;
+	_pid_Para k_para;
 }_pid;
 
 typedef	struct pidDouble{
@@ -36,9 +36,8 @@ typedef	struct pidDouble{
 	_pid	core;	
 }_pidDouble;
 
-int16_t pidGet(_pid_Para* ,
-							_pid_Out* ,
-							float ,
-							int16_t);
+int16_t pidGet(_pid_Para* ,_pid_Out* ,float ,int16_t);
+float amplitudeLimiting(uint8_t , float , float);					
 
 #endif
+

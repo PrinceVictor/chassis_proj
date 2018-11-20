@@ -51,6 +51,9 @@ CAN_FilterConfTypeDef can2_filetr;
 CanTxMsgTypeDef Tx1Message;
 CanRxMsgTypeDef	Rx1Message;
 
+CanTxMsgTypeDef Tx2Message;
+CanRxMsgTypeDef	Rx2Message;
+
 extern _chassis chassisPara;
 
 /* CAN1 init function */
@@ -119,6 +122,11 @@ void MX_CAN2_Init(void)
 	can2_filetr.FilterActivation=ENABLE; //¼¤»îÂË²¨Æ÷0
 	HAL_CAN_ConfigFilter(&hcan2,&can2_filetr);
 	
+	hcan2.pTxMsg = &Tx2Message;
+	hcan2.pRxMsg = &Rx2Message;
+	
+	__HAL_CAN_ENABLE_IT(&hcan2,CAN_IT_FMP0);
+	
 }
 
 static int HAL_RCC_CAN1_CLK_ENABLED=0;
@@ -182,16 +190,15 @@ void HAL_CAN_MspInit(CAN_HandleTypeDef* hcan)
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /* Peripheral interrupt init */
-    HAL_NVIC_SetPriority(CAN2_TX_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(CAN2_TX_IRQn);
-    HAL_NVIC_SetPriority(CAN2_RX0_IRQn, 0, 0);
+//    HAL_NVIC_SetPriority(CAN2_TX_IRQn, 0, 0);
+//    HAL_NVIC_EnableIRQ(CAN2_TX_IRQn);
+    HAL_NVIC_SetPriority(CAN2_RX0_IRQn, 0, 4);
     HAL_NVIC_EnableIRQ(CAN2_RX0_IRQn);
   /* USER CODE BEGIN CAN2_MspInit 1 */
 
   /* USER CODE END CAN2_MspInit 1 */
   }
 }
-
 
 HAL_StatusTypeDef can_send_msg(uint8_t flag, CAN_HandleTypeDef* hcan, CAN_MessageID _id, int16_t *data){
 	
@@ -214,38 +221,70 @@ HAL_StatusTypeDef can_send_msg(uint8_t flag, CAN_HandleTypeDef* hcan, CAN_Messag
 				hcan->pTxMsg->Data[7] = (uint8_t)(*(data+3));
 				break;
 			}
+			case CAN_WHEEL_TxID:{
+				hcan->pTxMsg->StdId = CAN_WHEEL_TxID;
+				hcan->pTxMsg->DLC = 8;
+				
+				for(int i=0;i<4;i++){
+					hcan->pTxMsg->Data[i*2+0] = (uint8_t)(*(data+i)>>8);
+					hcan->pTxMsg->Data[i*2+1] = (uint8_t)(*(data+i));
+				}
+				
+				break;
+			}
 			default :break;
 		}
 		
 		return HAL_CAN_Transmit(hcan,100);
 	}
-	else return NULL;
+	return NULL;
 }
 
 void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* hcan)
 {
+
    switch(hcan->pRxMsg->StdId){
 		 case CAN_IMU_RxID:{
+			 static float compensate = 0;
 			 imu_yaw.yaw = 0.01f *((hcan->pRxMsg->Data[0]<<24) + (hcan->pRxMsg->Data[1]<<16) \
-															+ (hcan->pRxMsg->Data[2] <<8) + (hcan->pRxMsg->Data[3]) );
+															+ (hcan->pRxMsg->Data[2] <<8) + (hcan->pRxMsg->Data[3]) ) - compensate;
 			  if(!imu_yaw.flag){
 				 if(imu_yaw.cycle_calibration){
 					 if(imu_yaw.yaw !=0) {
-						 imu_yaw.yaw = 0;
+						 imu_yaw.cycle_calibration --;
 					 }
-					 imu_yaw.cycle_calibration --;
+					 else{
+						 imu_yaw.flag = 1;
+					 }
+					 
 				 }
 				 else {
+					 compensate = imu_yaw.yaw;
 					 imu_yaw.flag = 1;
 				 }
 			 }
 			 break ;
 		 }
+		 case CAN_WHEEL_RxBeginID:{
+			 Wheel_Para.feedback.Speed[hcan->pRxMsg->StdId-0x201]= hcan->pRxMsg->Data[2]*256 + hcan->pRxMsg->Data[3];
+			 break;
+		 }
+		 case CAN_WHEEL_RxBeginID+1:{
+			 Wheel_Para.feedback.Speed[hcan->pRxMsg->StdId-0x201]= hcan->pRxMsg->Data[2]*256 + hcan->pRxMsg->Data[3];
+			 break;
+		 }
+		 case CAN_WHEEL_RxBeginID+2:{
+			 Wheel_Para.feedback.Speed[hcan->pRxMsg->StdId-0x201]= hcan->pRxMsg->Data[2]*256 + hcan->pRxMsg->Data[3];
+			 break;
+		 }
+		 case CAN_WHEEL_RxBeginID+3:{
+			 Wheel_Para.feedback.Speed[hcan->pRxMsg->StdId-0x201]= hcan->pRxMsg->Data[2]*256 + hcan->pRxMsg->Data[3];
+			 break;
+		 }
 		 default :break;
 	 }
 	 __HAL_CAN_ENABLE_IT(hcan,CAN_IT_FMP0);
 }
-
 
 
 void HAL_CAN_MspDeInit(CAN_HandleTypeDef* hcan)

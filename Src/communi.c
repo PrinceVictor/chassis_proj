@@ -1,6 +1,28 @@
 #include "communi.h"
+#include "chassis.h"
 
-_RC_Ctl remote = {0};
+#define abs(x) ((x)>0? (x):(-(x)))
+
+typedef struct {
+	float FB;
+	float LR;
+	float RT;
+}_direct_vector;
+
+const _direct_vector direct_vector={
+	1/660.0f,
+	1/660.0f,
+	30/660.0f
+};
+
+_RC_Ctl remote = {
+	.rc={
+		.ch0 =1024,
+		.ch1 =1024,
+		.ch2 =1024,
+		.ch3 =1024
+	}
+};
 uint8_t remoteData_receiveFlag = 0;
 
 uint8_t Readremote(const uint8_t* buffer){
@@ -23,4 +45,45 @@ uint8_t Readremote(const uint8_t* buffer){
 		return 1;
 	}
 	return remoteData_receiveFlag;
+}
+
+uint8_t RemoteFeed(uint8_t flag){
+	static uint16_t feed_count = 25;
+	if(flag){
+		feed_count = 25;
+		return ENABLE;
+	}
+	else if(feed_count == 0){
+		return DISABLE;
+	}
+	else {
+		feed_count--;
+	}
+	return ENABLE;
+}
+
+uint8_t RemoteControl(uint8_t flag, _RC_Ctl* data, _chassis* chassis){
+	if(flag){
+		if(abs(data->rc.ch0-1024)>50){
+			chassis->Lr = (data->rc.ch0-1024)*direct_vector.LR;
+		}
+		else chassis->Lr = 0;
+	
+		if(abs(data->rc.ch1-1024)>50){
+			chassis->Fb = (data->rc.ch1-1024)*direct_vector.FB;
+		}
+		else chassis->Fb = 0;
+		
+		if(abs(data->rc.ch2-1024)>50){
+			chassis->Rt = -(data->rc.ch2-1024)*direct_vector.RT;
+		}
+		else chassis->Rt = 0;
+		
+	}
+	else{
+		chassis->Lr = 0;
+		chassis->Fb = 0;
+		chassis->Rt = 0;
+	}
+	return flag;
 }

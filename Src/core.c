@@ -1,5 +1,6 @@
 #include "core.h"
 #include "communi.h"
+#include "chassis.h"
 #include "gpio.h"
 #include "can.h"
 #include "imu.h"
@@ -8,9 +9,13 @@
 #include "string.h"
 #include "tim.h"
 
-#define init 0
-#define run	 1
-#define stop 2
+typedef enum{
+
+	core_init = 0,
+	core_run = 1,
+	core_stop = 2
+
+}core_state;
 
 extern DMA_HandleTypeDef hdma_usart2_tx;
 
@@ -20,21 +25,22 @@ extern int16_t IMU_TxInit[4];
 extern uint8_t uart2_tx_busyFlag;
 
 extern uint8_t mian_func_start;
-_sysState sys = { 0 };
 
 void YawUpdate(uint8_t);
 uint8_t Usart_Tx(uint8_t* , Tx_Mode , UART_HandleTypeDef *, uint8_t* ,uint16_t );
 
 uint8_t RemoteFeed(uint8_t);
 uint32_t Get_Freqz(Freqz*);
-uint32_t check_timer =0, last_check_time =0, period =0;
-uint32_t check_timer1 =0, last_check_time1 =0, period1 =0;
+uint8_t RemoteControl(uint8_t , _RC_Ctl* , _chassis* );
+
+_sysState sys = { 0 };
+
 Freqz tim4_fs;
 
 uint8_t Core_Task(uint8_t flag, uint32_t* time_count){
 	if(flag){
 		switch(sys.state){
-			case init:{
+			case core_init:{
 				
 				if(imu_yaw.count == 3000){
 					can_send_msg(ENABLE, &hcan1, CAN_IMU_TxID, IMU_TxInit);
@@ -47,11 +53,11 @@ uint8_t Core_Task(uint8_t flag, uint32_t* time_count){
 				else{
 					imu_yaw.count = 3000; // require that complete the reset IMU device in 3 seconds
 				}
-				if(imu_yaw.flag && mian_func_start) sys.state	= run;
+				if(imu_yaw.flag && mian_func_start) sys.state	= core_run;
 				
 				break;
 			}
-			case run:{
+			case core_run:{
 				
 				if(*time_count > 1000){
 						//led0_switch;
@@ -59,16 +65,21 @@ uint8_t Core_Task(uint8_t flag, uint32_t* time_count){
 				}
 				
 				if(RemoteFeed(Readremote(remote_rx_buffer))){		
+					can_send_msg(ChassisControl(RemoteControl(ENABLE,&remote,&chassisPara)), 
+											&hcan2,
+											CAN_WHEEL_TxID, 
+											Wheel_Para.wheel.pidOut);
 				}
 				else{
-					
+					can_send_msg(ChassisControl(DISABLE), &hcan2, CAN_WHEEL_TxID, Wheel_Para.wheel.pidOut);
 				}
 				//Get_Freqz(&tim4_fs);
 				//YawUpdate(ENABLE);
 				Usart_Tx(&uart2_tx_busyFlag, Attitude_dataUpload, &huart2, usart2_tx_buffer, usart2_tx_bufferLength);
 				break;
 			}
-			case stop:{
+			case core_stop:{
+				
 				break;
 			}
 			default: break;
@@ -76,23 +87,6 @@ uint8_t Core_Task(uint8_t flag, uint32_t* time_count){
 	}
 	return flag;
 }
-
-
-uint8_t RemoteFeed(uint8_t flag){
-	static uint16_t feed_count = 25;
-	if(flag){
-		feed_count = 25;
-		return ENABLE;
-	}
-	else if(feed_count == 0){
-		return DISABLE;
-	}
-	else {
-		feed_count--;
-	}
-	return ENABLE;
-}
-
 
 uint8_t Usart_Tx(uint8_t* flag, Tx_Mode mode, UART_HandleTypeDef *huart, uint8_t* tx_data,uint16_t size){
 	uint8_t data[size];
@@ -106,20 +100,39 @@ uint8_t Usart_Tx(uint8_t* flag, Tx_Mode mode, UART_HandleTypeDef *huart, uint8_t
 					data[2] = BYTE1(*(&imu_yaw.yaw));
 					data[3] = BYTE2(*(&imu_yaw.yaw));
 					data[4] = BYTE3(*(&imu_yaw.yaw));
-					//int16 mpu6050 dmp data 
+					
+					
 					data[5] = 0xb0;
-					data[6] = BYTE0(*(&dmp_angle.yaw));  
-					data[7] = BYTE1(*(&dmp_angle.yaw));
-					data[8] = BYTE2(*(&dmp_angle.yaw));
-					data[9] = BYTE3(*(&dmp_angle.yaw));
-					data[10] = BYTE0(*(&dmp_angle.pitch));  
-					data[11] = BYTE1(*(&dmp_angle.pitch));
-					data[12] = BYTE2(*(&dmp_angle.pitch));
-					data[13] = BYTE3(*(&dmp_angle.pitch));
-					data[14] = BYTE0(*(&dmp_angle.roll));  
-					data[15] = BYTE1(*(&dmp_angle.roll));
-					data[16] = BYTE2(*(&dmp_angle.roll));
-					data[17] = BYTE3(*(&dmp_angle.roll));
+					//wheels information
+					data[6] = Wheel_Para.feedback.Speed[0]>>8;  
+					data[7] = Wheel_Para.feedback.Speed[0];
+					data[8] = Wheel_Para.feedback.Speed[1]>>8;
+					data[9] = Wheel_Para.feedback.Speed[1];
+					data[10] = Wheel_Para.feedback.Speed[2]>>8;  
+					data[11] = Wheel_Para.feedback.Speed[2];
+					data[12] = Wheel_Para.feedback.Speed[3]>>8;
+					data[13] = Wheel_Para.feedback.Speed[3];
+					
+					//time
+					uint32_t timcnt = TIM2->CNT;
+					data[14] = timcnt >>24;  
+					data[15] = timcnt >>16;
+					data[16] = timcnt >>8;
+					data[17] = timcnt;
+					//int16 mpu6050 dmp data 
+//					data[6] = BYTE0(*(&dmp_angle.yaw));  
+//					data[7] = BYTE1(*(&dmp_angle.yaw));
+//					data[8] = BYTE2(*(&dmp_angle.yaw));
+//					data[9] = BYTE3(*(&dmp_angle.yaw));
+//					data[10] = BYTE0(*(&dmp_angle.pitch));  
+//					data[11] = BYTE1(*(&dmp_angle.pitch));
+//					data[12] = BYTE2(*(&dmp_angle.pitch));
+//					data[13] = BYTE3(*(&dmp_angle.pitch));
+//					data[14] = BYTE0(*(&dmp_angle.roll));  
+//					data[15] = BYTE1(*(&dmp_angle.roll));
+//					data[16] = BYTE2(*(&dmp_angle.roll));
+//					data[17] = BYTE3(*(&dmp_angle.roll));
+					
 					//int16 mpu6050 gyro data
 					data[18] = 0xc0;
 					data[19] = sensor.gyro.origin.x >> 8;

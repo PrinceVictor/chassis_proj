@@ -2,9 +2,6 @@
 
 #define abs(x) ((x)>0? (x):(-(x)))
 
-float amplitudeLimiting(uint8_t , float , float);
-
-
 int16_t pidGet(_pid_Para* pidPara,
 							_pid_Out* pidOut,
 							float target,
@@ -14,14 +11,13 @@ int16_t pidGet(_pid_Para* pidPara,
 	pidOut->target = target;
 	pidOut->feedback = (float)feedback;
 	pidOut->error = target - (float)feedback;
-	if(!pidPara->flag){
+	
+	if(!pidPara->modeFlag){
 		return 0;
 	}
 	else{
-		
-		switch(pidPara->flag){
-		case 1:  break;
-		case 2: {
+		switch(pidPara->modeFlag){
+		case 1: { 
 			pidOut->error = pidOut->error * 0.5f;
 			if(pidOut->target == 0){
 				if(abs(pidOut->error)<20.0f) pidOut->error = 0;
@@ -32,6 +28,9 @@ int16_t pidGet(_pid_Para* pidPara,
 				pidOut -> i_interval = 0;
 				pidOut ->i_Out = 0;
 			}
+			break;
+		}
+		case 2: {
 			break;
 		}		
 		default : break;
@@ -53,7 +52,7 @@ int16_t pidGet(_pid_Para* pidPara,
 		pidOut->last_error = pidOut->error;
 		pidOut->Out = pidOut->p_Out + pidOut->d_Out;
 	}
-	pidOut->Out = amplitudeLimiting(pidPara->flag,
+	pidOut->Out = amplitudeLimiting(pidPara->modeFlag,
 										pidOut->Out,
 										pidPara->outlimit);
 	return (int16_t)pidOut->Out;

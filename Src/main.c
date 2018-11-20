@@ -121,8 +121,8 @@ int main(void)
 	Remote_rx_start(ENABLE);
 	Usart2_rx_start(ENABLE);
 	
-	while(mpu_dmp_init()){
-	}
+//	while(mpu_dmp_init()){
+//	}
 	
 	Gyro_OFFEST();
 	
@@ -135,7 +135,7 @@ int main(void)
   /* USER CODE END WHILE */
 		mian_func_start = 1;
 		imu(ENABLE);
-		mpu_dmp_get_data(&dmp_angle.pitch, &dmp_angle.roll,&dmp_angle.yaw);
+//		mpu_dmp_get_data(&dmp_angle.pitch, &dmp_angle.roll,&dmp_angle.yaw);
 		main_flag = 1;
 //		Get_Freqz(&Main_fs);
 		

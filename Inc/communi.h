@@ -28,7 +28,10 @@ typedef struct RC_Ctl
 	}key;
 }_RC_Ctl;
 
+extern _RC_Ctl remote;
 
 uint8_t Readremote(const uint8_t*);
+
+
 #endif
 

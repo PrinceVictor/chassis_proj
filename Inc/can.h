@@ -46,7 +46,9 @@
 typedef enum{
 
 	CAN_IMU_RxID= 0x401,
-	CAN_IMU_TxID= 0x404
+	CAN_IMU_TxID= 0x404,	
+	CAN_WHEEL_TxID= 0x200,
+	CAN_WHEEL_RxBeginID= 0x201
 
 }CAN_MessageID;
 

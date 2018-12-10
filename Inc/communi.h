@@ -13,6 +13,7 @@ typedef struct RC_Ctl
 		uint16_t ch3;
 		uint8_t s1;
 		uint8_t s2;
+		uint8_t switch_state;
 	}rc;
 	struct
 	{

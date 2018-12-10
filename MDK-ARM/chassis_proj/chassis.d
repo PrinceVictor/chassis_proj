@@ -35,4 +35,5 @@ chassis_proj\chassis.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 chassis_proj\chassis.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 chassis_proj\chassis.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 chassis_proj\chassis.o: ../Inc/pid.h
+chassis_proj\chassis.o: ../Inc/imu.h
 chassis_proj\chassis.o: ../Inc/6050.h

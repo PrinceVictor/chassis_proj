@@ -5,7 +5,7 @@
 int16_t pidGet(_pid_Para* pidPara,
 							_pid_Out* pidOut,
 							float target,
-							int16_t feedback)
+							float feedback)
 {
 	float last_target = pidOut->target;
 	pidOut->target = target;
@@ -18,9 +18,9 @@ int16_t pidGet(_pid_Para* pidPara,
 	else{
 		switch(pidPara->modeFlag){
 		case 1: { 
-			pidOut->error = pidOut->error * 0.5f;
+			pidOut->error = pidOut->error * 0.7f;
 			if(pidOut->target == 0){
-				if(abs(pidOut->error)<20.0f) pidOut->error = 0;
+				if(abs(pidOut->error)<100.0f) pidOut->error = 0;
 			}
 			if((abs(pidOut->error) < 400) && (pidOut->target != 0)) pidPara ->i_flag = 1;
 			else {
@@ -31,6 +31,14 @@ int16_t pidGet(_pid_Para* pidPara,
 			break;
 		}
 		case 2: {
+			pidOut->error = pidOut->error * 1.0f;
+			if(abs(pidOut->error)<0.5f && (pidPara->otherflag == 0)) pidOut->error = 0;
+			if((abs(pidOut->error) > 30) && (pidPara->otherflag != 0)) pidPara ->i_flag = 1;
+			else {
+				pidPara ->i_flag = 0;
+				pidOut -> i_interval = 0;
+				pidOut ->i_Out = 0;
+			}
 			break;
 		}		
 		default : break;

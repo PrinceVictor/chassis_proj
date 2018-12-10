@@ -224,18 +224,20 @@ HAL_StatusTypeDef can_send_msg(uint8_t flag, CAN_HandleTypeDef* hcan, CAN_Messag
 			case CAN_WHEEL_TxID:{
 				hcan->pTxMsg->StdId = CAN_WHEEL_TxID;
 				hcan->pTxMsg->DLC = 8;
-				
-				for(int i=0;i<4;i++){
-					hcan->pTxMsg->Data[i*2+0] = (uint8_t)(*(data+i)>>8);
-					hcan->pTxMsg->Data[i*2+1] = (uint8_t)(*(data+i));
-				}
-				
+				hcan->pTxMsg->Data[0] = (uint8_t)(*(data+1)>>8);
+				hcan->pTxMsg->Data[1] = (uint8_t)(*(data+1));
+				hcan->pTxMsg->Data[2] = (uint8_t)(*(data+0)>>8);
+				hcan->pTxMsg->Data[3] = (uint8_t)(*(data+0));
+				hcan->pTxMsg->Data[4] = (uint8_t)(*(data+3)>>8);
+				hcan->pTxMsg->Data[5] = (uint8_t)(*(data+3));
+				hcan->pTxMsg->Data[6] = (uint8_t)(*(data+2)>>8);
+				hcan->pTxMsg->Data[7] = (uint8_t)(*(data+2));
 				break;
 			}
 			default :break;
 		}
 		
-		return HAL_CAN_Transmit(hcan,100);
+		return HAL_CAN_Transmit(hcan,50);
 	}
 	return NULL;
 }
@@ -266,19 +268,19 @@ void HAL_CAN_RxCpltCallback(CAN_HandleTypeDef* hcan)
 			 break ;
 		 }
 		 case CAN_WHEEL_RxBeginID:{
-			 Wheel_Para.feedback.Speed[hcan->pRxMsg->StdId-0x201]= hcan->pRxMsg->Data[2]*256 + hcan->pRxMsg->Data[3];
+			 Wheel_Para.feedback.Speed[1]= hcan->pRxMsg->Data[2]*256 + hcan->pRxMsg->Data[3];
 			 break;
 		 }
 		 case CAN_WHEEL_RxBeginID+1:{
-			 Wheel_Para.feedback.Speed[hcan->pRxMsg->StdId-0x201]= hcan->pRxMsg->Data[2]*256 + hcan->pRxMsg->Data[3];
+			 Wheel_Para.feedback.Speed[0]= hcan->pRxMsg->Data[2]*256 + hcan->pRxMsg->Data[3];
 			 break;
 		 }
 		 case CAN_WHEEL_RxBeginID+2:{
-			 Wheel_Para.feedback.Speed[hcan->pRxMsg->StdId-0x201]= hcan->pRxMsg->Data[2]*256 + hcan->pRxMsg->Data[3];
+			 Wheel_Para.feedback.Speed[3]= hcan->pRxMsg->Data[2]*256 + hcan->pRxMsg->Data[3];
 			 break;
 		 }
 		 case CAN_WHEEL_RxBeginID+3:{
-			 Wheel_Para.feedback.Speed[hcan->pRxMsg->StdId-0x201]= hcan->pRxMsg->Data[2]*256 + hcan->pRxMsg->Data[3];
+			 Wheel_Para.feedback.Speed[2]= hcan->pRxMsg->Data[2]*256 + hcan->pRxMsg->Data[3];
 			 break;
 		 }
 		 default :break;

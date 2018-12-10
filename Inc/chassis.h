@@ -11,10 +11,13 @@ typedef struct{
 	float angle;
 	float angle_speed;
 	float angle_last;
+	uint8_t changeflag;
 }_chassisYaw;
 
 typedef struct{
 	_chassisYaw yaw;
+	_pid_Para k_para;
+	_pid_Out pid;
 	float Fb;
 	float Lr;
 	float Rt;
@@ -60,6 +63,7 @@ extern _wheel_Info Wheel_Para;
 extern _chassis chassisPara;
 
 uint8_t ChassisControl(uint8_t);
+void Wheelupdate(_wheel_Info *, int16_t*);
 
 #endif
 

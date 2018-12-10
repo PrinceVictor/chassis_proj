@@ -64,7 +64,16 @@ uint8_t Core_Task(uint8_t flag, uint32_t* time_count){
 						*time_count = 0;
 				}
 				
-				if(RemoteFeed(Readremote(remote_rx_buffer))){		
+				Usart_Tx(&uart2_tx_busyFlag, Attitude_dataUpload, &huart2, usart2_tx_buffer, usart2_tx_bufferLength);
+				
+				if(RemoteFeed(Readremote(remote_rx_buffer))){
+				
+					//	Wheelupdate(&Wheel_Para, Wheel_Para.feedback.Speed);
+					if(remote.rc.switch_state){
+						chassisPara.yaw.last_target = imu_yaw.yaw;
+						remote.rc.switch_state = 0;
+					}
+					
 					can_send_msg(ChassisControl(RemoteControl(ENABLE,&remote,&chassisPara)), 
 											&hcan2,
 											CAN_WHEEL_TxID, 
@@ -72,10 +81,13 @@ uint8_t Core_Task(uint8_t flag, uint32_t* time_count){
 				}
 				else{
 					can_send_msg(ChassisControl(DISABLE), &hcan2, CAN_WHEEL_TxID, Wheel_Para.wheel.pidOut);
+					remote.rc.switch_state = 1; 
 				}
-				//Get_Freqz(&tim4_fs);
+				
+				
+				Get_Freqz(&tim4_fs);
 				//YawUpdate(ENABLE);
-				Usart_Tx(&uart2_tx_busyFlag, Attitude_dataUpload, &huart2, usart2_tx_buffer, usart2_tx_bufferLength);
+				
 				break;
 			}
 			case core_stop:{
@@ -87,6 +99,8 @@ uint8_t Core_Task(uint8_t flag, uint32_t* time_count){
 	}
 	return flag;
 }
+uint32_t timcnt = 0;
+uint32_t check =0;
 
 uint8_t Usart_Tx(uint8_t* flag, Tx_Mode mode, UART_HandleTypeDef *huart, uint8_t* tx_data,uint16_t size){
 	uint8_t data[size];
@@ -114,11 +128,13 @@ uint8_t Usart_Tx(uint8_t* flag, Tx_Mode mode, UART_HandleTypeDef *huart, uint8_t
 					data[13] = Wheel_Para.feedback.Speed[3];
 					
 					//time
-					uint32_t timcnt = TIM2->CNT;
+					timcnt = TIM2->CNT;
 					data[14] = timcnt >>24;  
 					data[15] = timcnt >>16;
 					data[16] = timcnt >>8;
 					data[17] = timcnt;
+					
+					check = (data[14]<<24) + (data[15]<<16) + (data[16]<<8) + data[17];
 					//int16 mpu6050 dmp data 
 //					data[6] = BYTE0(*(&dmp_angle.yaw));  
 //					data[7] = BYTE1(*(&dmp_angle.yaw));

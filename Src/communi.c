@@ -12,7 +12,7 @@ typedef struct {
 const _direct_vector direct_vector={
 	1/660.0f,
 	1/660.0f,
-	30/660.0f
+	60/660.0f
 };
 
 _RC_Ctl remote = {
@@ -20,7 +20,8 @@ _RC_Ctl remote = {
 		.ch0 =1024,
 		.ch1 =1024,
 		.ch2 =1024,
-		.ch3 =1024
+		.ch3 =1024,
+		.switch_state = 1
 	}
 };
 uint8_t remoteData_receiveFlag = 0;
@@ -65,7 +66,7 @@ uint8_t RemoteFeed(uint8_t flag){
 uint8_t RemoteControl(uint8_t flag, _RC_Ctl* data, _chassis* chassis){
 	if(flag){
 		if(abs(data->rc.ch0-1024)>50){
-			chassis->Lr = (data->rc.ch0-1024)*direct_vector.LR;
+			chassis->Lr = -(data->rc.ch0-1024)*direct_vector.LR;
 		}
 		else chassis->Lr = 0;
 	

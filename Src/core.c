@@ -60,7 +60,7 @@ uint8_t Core_Task(uint8_t flag, uint32_t* time_count){
 			case core_run:{
 				
 				if(*time_count > 1000){
-						//led0_switch;
+//						led0_switch;
 						*time_count = 0;
 				}
 				

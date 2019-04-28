@@ -1,5 +1,7 @@
 #include "communi.h"
 #include "chassis.h"
+#include "pid.h"
+#include "imu.h"
 
 #define abs(x) ((x)>0? (x):(-(x)))
 
@@ -79,6 +81,27 @@ uint8_t RemoteControl(uint8_t flag, _RC_Ctl* data, _chassis* chassis){
 			chassis->Rt = -(data->rc.ch2-1024)*direct_vector.RT;
 		}
 		else chassis->Rt = 0;
+		
+		if(data->rc.s2 == 1){
+			 chassis->Lr = 0;
+		}
+		if(data->rc.s1 == 1){
+			chassis->yaw.temp = chassis->yaw.last_target + chassis->Rt/1000.0f;
+	
+			if(chassis->yaw.temp != chassis->yaw.last_target) chassis->k_para.otherflag = 1;
+			else chassis->k_para.otherflag = 0; 
+
+			chassis->yaw.target = chassis->yaw.temp;
+			chassis->yaw.last_target = chassis->yaw.target;
+
+			pidGet(&chassisPara.k_para,&chassisPara.pid,chassis->yaw.target,imu_yaw.yaw);
+			
+			chassis->Rt_out = chassis->pid.p_Out;
+		}
+		else {
+			chassis->Rt_out = chassis->Rt;
+			data->rc.switch_state = 1;
+		}
 		
 	}
 	else{

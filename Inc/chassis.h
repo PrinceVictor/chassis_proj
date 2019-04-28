@@ -21,6 +21,7 @@ typedef struct{
 	float Fb;
 	float Lr;
 	float Rt;
+	float Rt_out;
 	float x,y;
 	float observe;
 	uint8_t pid_flag;

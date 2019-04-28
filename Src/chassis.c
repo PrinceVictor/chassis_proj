@@ -9,8 +9,8 @@
 #define PI 3.1415926f
 
 typedef enum{
-	length= 290,  //mirco meter
-	width= 400
+	length= 335,  //mirco meter
+	width= 360
 }vehicle_size;
 
 _chassis chassisPara = {
@@ -77,20 +77,10 @@ uint8_t ChassisControl(uint8_t flag){
 void WheelSolute(_wheel_Info* wheels ,_chassis* chassis){
 	float temp[4];
 	
-	chassis->yaw.temp = chassis->yaw.last_target + chassis->Rt/1000.0f;
-	
-	if(chassis->yaw.temp != chassis->yaw.last_target) chassis->k_para.otherflag = 1;
-	else chassis->k_para.otherflag = 0; 
-	
-	chassis->yaw.target = chassis->yaw.temp;
-	chassis->yaw.last_target = chassis->yaw.target;
-	
-	pidGet(&chassisPara.k_para,&chassisPara.pid,chassis->yaw.target,imu_yaw.yaw);
-	
-	temp[0] = chassis->Fb - chassis->Lr - (length+width)*chassis->pid.p_Out*Degree2Radian/2000.0f;
-	temp[1] = -(chassis->Fb+chassis->Lr + (length+width)*chassis->pid.p_Out*Degree2Radian/2000.0f);
-	temp[2] = -(chassis->Fb-chassis->Lr + (length+width)*chassis->pid.p_Out*Degree2Radian/2000.0f);
-	temp[3] = chassis->Fb + chassis->Lr - (length+width)*chassis->pid.p_Out*Degree2Radian/2000.0f;
+	temp[0] = chassis->Fb - chassis->Lr - (length+width)*chassis->Rt_out*Degree2Radian/2000.0f;
+	temp[1] = -(chassis->Fb+chassis->Lr + (length+width)*chassis->Rt_out*Degree2Radian/2000.0f);
+	temp[2] = -(chassis->Fb-chassis->Lr + (length+width)*chassis->Rt_out*Degree2Radian/2000.0f);
+	temp[3] = chassis->Fb + chassis->Lr - (length+width)*chassis->Rt_out*Degree2Radian/2000.0f;
 	
 	for(int i=0; i<4; i++ ){
 		wheels->wheel.target_speed[i]=amplitudeLimiting(ENABLE,temp[i]*LineSpeed2Rotor*1000.0f,4000);
